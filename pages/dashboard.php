@@ -13,7 +13,7 @@
 
 
     <!-- Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mt-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-5">
 
         <!-- Pending Sales -->
         <div class="bg-amber-50 border-l-8 border-yellow-900 rounded-xl shadow-md p-4">
