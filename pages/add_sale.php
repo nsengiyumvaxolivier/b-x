@@ -151,9 +151,14 @@ if (isset($_POST['save'])) {
     $quantity = $a['ord_quantity'];
     $dsc = $a['discount'];
     $price=$a['price'];
+    //Insert the selected Items intno the salles_item table..................................................................
     $insert=$conn->prepare("INSERT into salles_item(business,product,ord_quantity,status,discount,customer,sale,price) values(?,?,?,?,?,?,?,?)");
     $insert->bind_param("iididiid",$business,$item,$quantity,$status,$dsc,$customer,$sale,$price);
     $insert->execute();
+    //Update Stock Quantity of the selected Items........................................................................
+    $update_item=$conn->prepare("UPDATE item set quantity = quantity-? where id=?");
+    $update_item->bind_param("ii",$quantity,$item);
+    $update_item->execute();
 
    
     
@@ -162,6 +167,8 @@ if (isset($_POST['save'])) {
   $sale_insert->bind_param("iiiiddid",$customer,$no,$business,$status,$total_dsc,$debit,$sale,$total);
   
   if ($sale_insert->execute()) {
+
+
     unset($_SESSION['customer']);
     unset($_SESSION['customername']);
     

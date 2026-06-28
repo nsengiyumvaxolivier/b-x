@@ -4,16 +4,26 @@ include("connection.php");
 if (!isset($_SESSION['customer'])) {
     echo "<script>alert('Please select Customer',location='add_sale')</script>";
     exit;
-}
+}$business = $_SESSION['user'];
 $customer = $_SESSION['customer'];
 $product = $_GET['product'];
+
 $stmt = $conn->prepare("SELECT * FROM item where id =?");
 $stmt->bind_param("i",$product);
 $stmt->execute();
 $result=$stmt->get_result();
 $a=$result->fetch_assoc();
+  $status=0;
 
-$business = $_SESSION['user'];
+
+$checkitem= $conn->prepare("SELECT * FROM orders where product =? and customer=? and business=? and status =?");
+$checkitem->bind_param("iiii",$product,$customer,$business,$status);
+$checkitem->execute();
+$checkresult = $checkitem->get_result();
+if ($checkresult->num_rows > 0) {
+    echo "<script>alert('Product Already Selected'),location='get_item'</script>";
+   
+}
 
 
 
@@ -85,7 +95,7 @@ if (isset($_POST['save'])) {
     $quantity=$_POST['quantity'];
     $disacount=$_POST['disacount'];
     $price= $a['out_price']-$disacount;
-    $status=0;
+  
     $current=$a['quantity'];
 
     if ($current >= $quantity) {

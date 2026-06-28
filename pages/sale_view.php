@@ -90,10 +90,10 @@ $customername=$customer['name'];
                         <td> <?php echo $no ?></td>
                         <td> <?php echo $sales['item_name'] ?></td>
                         <td> <?php echo $sales['ord_quantity'] ?></td>
-                        <td> <?php echo $sales['price'] ?></td>
-                        <td> <?php echo $sales['discount'] ?></td>
-                        <td> <?php echo $sales['ord_quantity']*$sales['price'] ?></td>
-                        <td> <?php echo $sales['ord_quantity']*$sales['discount'] ?></td>
+                        <td id="pricies"> <?php echo $sales['price'] ?></td>
+                        <td id="pricies"> <?php echo $sales['discount'] ?></td>
+                        <td id="pricies"> <?php echo $sales['ord_quantity']*$sales['price'] ?></td>
+                        <td id="pricies"> <?php echo $sales['ord_quantity']*$sales['discount'] ?></td>
                     </tr>
 
                     <?php
@@ -114,10 +114,10 @@ $customername=$customer['name'];
                 ?>
                 <div class="left w-[50%]"></div>
                 <div class="right w-[50%] text-left">
-                    <label for="" class="block text-sm"><b>Total Ammount: </b><?php echo $sal['ammount'] ?></label>
-                    <label for="" class="block text-sm"><b>Total Discount: </b><?php echo $sal['discount'] ?></label>
-                    <label for="" class="block text-sm"><b>Total product: </b><?php echo $sal['products'] ?></label>
-                    <label for="" class="block text-sm"><b>Create At: </b><?php echo $sal['salles_date'] ?></label>
+                    <label for="" class="block text-sm"><b>Total Ammount: </b><span id="pricies"><?php echo $sal['ammount'] ?></span></label>
+                    <label for="" class="block text-sm"><b>Total Discount: </b><span id="pricies"><?php echo $sal['discount'] ?></span></label>
+                    <label for="" class="block text-sm"><b>Total product: </b><span><?php echo $sal['products'] ?></span></label>
+                    <label for="" class="block text-sm"><b>Create At: </b><span><?php echo $sal['salles_date'] ?></span></label>
                 </div>
 
             </div>
@@ -166,6 +166,20 @@ $customername=$customer['name'];
         };
         html2pdf(text,opt);
     });
+
+
+
+document.querySelectorAll("#pricies").forEach(
+    e=>{
+        var price=parseFloat(e.innerHTML);
+        e.innerHTML=price.toLocaleString();
+    }
+)
+
+
+
+
+
 
   
   

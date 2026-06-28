@@ -41,6 +41,9 @@ $page = $_GET['url'] ?? 'dashboard';
                 <a href="supplier"
                     class="<?= $page=='supplier' ? 'border-green-500 text-green-500' : 'border-white text-white' ?>"><i
                         class="bi bi-truck"></i></a>
+                        <a href="report"
+                    class="<?= $page=='report' ? 'border-green-500 text-green-500' : 'border-white text-white' ?>"><i
+                        class="bi bi-list"></i></a>
                        
                
 

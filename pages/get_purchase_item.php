@@ -1,9 +1,11 @@
 <?php
 include("connection.php");
-if (! isset($_SESSION['supplier'])) {
+
+if (! isset($_SESSION['supplier']) or $_SESSION['supplier'] == "") {
     echo"<script>alert('please select Supplier'),location='add_purchase'</script>";
     exit;
 }
+
 $supplier=$_SESSION['supplier'];
 ?>
 <!DOCTYPE html>

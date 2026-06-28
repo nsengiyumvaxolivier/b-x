@@ -1,5 +1,9 @@
 <?php
 include("connection.php");
+if (!isset($_SESSION['customer']) or $_SESSION['customer'] == "") {
+    echo"<script>alert('please select Customer'),location='add_sale'</script>";
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

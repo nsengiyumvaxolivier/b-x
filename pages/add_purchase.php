@@ -165,9 +165,14 @@ if (isset($_POST['save'])) {
     $out_price= $a['pout_price'];
     $quantity = $a['p_quantity'];
     $expiry=$a['expiry_date'];
+    //inset the selected Items intno the purchase_items table..................................................................
     $insert=$conn->prepare("INSERT into purchase_items(business,item,quantity,status,supplier,purchase,in_price,out_price,expiry_date) values(?,?,?,?,?,?,?,?,?)");
     $insert->bind_param("iidiiidds",$business,$item,$quantity,$status,$supplier,$purchase,$in_price,$out_price,$expiry);
     $insert->execute();
+    //Update Stock Quantity of the selected Items........................................................................
+    $update_item=$conn->prepare("UPDATE item set quantity = quantity+?,expiry_date = ?,business = ?,in_price = ?,out_price = ? where id=?");
+    $update_item->bind_param("iisddi",$quantity,$expiry,$business,$in_price,$out_price,$item);
+    $update_item->execute();
 
    
     

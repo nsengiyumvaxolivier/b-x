@@ -4,6 +4,7 @@ include("connection.php");
 $supplier=$_SESSION['supplier'];
 $item=$_GET['item'];
 $business=$_SESSION['user'];
+$status=0;
 
 $select_supplier=$conn->prepare("SELECT * FROM supplier where sp_id=?");
 $select_supplier->bind_param("i",$supplier);
@@ -16,8 +17,14 @@ $select_item->bind_param("i",$item);
 $select_item->execute();
 $a_item=$select_item->get_result();
 $it=$a_item->fetch_assoc();
-
-
+$checkitem= $conn->prepare("SELECT * FROM purchase_orders where item =? and supplier=? and business=? and status =?");
+$checkitem->bind_param("iiii",$item,$supplier,$business,$status);
+$checkitem->execute();
+$a_checkitem=$checkitem->get_result();
+if ($a_checkitem->num_rows > 0) {
+    echo "<script>alert('Product Already Selected'),location='get_purchase_item'</script>";
+    exit;
+}
 
 
 ?>
