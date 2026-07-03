@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 23, 2026 at 07:55 PM
+-- Generation Time: Jul 03, 2026 at 01:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -75,7 +75,7 @@ CREATE TABLE `business` (
 --
 
 INSERT INTO `business` (`admin`, `username`, `password`, `user_type`, `names`, `phone`, `email`, `location`, `business`, `logo`, `registed_at`) VALUES
-(1, 'olivier', '123', 0, 'Nsengiyumva Olivier', '0795008053', 'nsengiyumvaxolivier@gmail.com', 'kicukiro-gatenga', 'N.O Business', 'unilak-logo.jpg', '2026-06-10 22:39:28'),
+(1, 'olivier', '123', 0, 'Nsengiyumva Olivier', '0795008053', 'nsengiyumvaxolivier@gmail.com', 'kicukiro-gatenga', 'Nsengiyumva olivier Business', 'unilak-logo.jpg', '2026-06-10 22:39:28'),
 (2, 'admin', '1234', 0, 'TUYISHIME Gilbert', '0792414909', 'gilberttuyishime38@gmail.com', 'kanombe', 'school', '971.jpg', '2026-06-10 22:43:48'),
 (3, 'amani', '12', 0, 'Nsengiyumva Olivier', '0795008053', 'nsengiyumvaxolivier@gmail.com', 'gasabo', 'school', '971.jpg', '2026-06-10 22:45:20'),
 (4, 'bx', 'bx123', 0, 'Nsengiyumva Olivier', '0795008053', 'nsengiyumvaxolivier@gmail.com', 'kanombe', 'B-X Business', 'unilak-logo.jpg', '2026-06-11 10:26:29');
@@ -156,7 +156,7 @@ CREATE TABLE `item` (
 INSERT INTO `item` (`id`, `item_name`, `in_price`, `out_price`, `quantity`, `item_supliyer`, `reg_date`, `pcs`, `business`, `expiry_date`, `profit`) VALUES
 (1, 'Rice', 29000, 32000, 30, 11, '2026-06-11 10:23:40', 1, 1, '2026-10-30', 3000),
 (2, 'ubunyobwa', 1600, 1800, 50, 2, '2026-06-11 10:25:01', 50, 1, '2026-09-24', 200),
-(3, 'Rice', 29000, 30500, 60, 11, '2026-06-11 10:28:03', 1, 4, '2026-09-25', 1500),
+(3, 'Rice', 29000, 30500, 60, 1, '2026-06-11 10:28:03', 1, 4, '2026-09-25', 1500),
 (4, 'Kawinga', 19000, 23000, 30, 2, '2026-06-11 15:59:04', 1, 4, '2026-09-24', 4000),
 (5, 'pakmay', 7000, 8500, 8, 3, '2026-06-12 00:32:22', 2, 1, '2026-10-23', 1500),
 (6, 'salt', 225, 300, 800, 2, '2026-06-22 07:17:02', 40, 4, '2026-06-30', 75);
@@ -352,6 +352,23 @@ INSERT INTO `purchase_orders` (`pord_id`, `business`, `supplier`, `item`, `p_qua
 (5, 1, 3, 1, 5, 28000, 30000, '2026-06-21 08:21:59', '2026-06-28', 1, 1),
 (6, 1, 3, 5, 8, 7500, 8500, '2026-06-21 08:23:03', '2026-06-27', 1, 2),
 (7, 4, 2, 3, 7, 29000, 30500, '2026-06-21 08:23:46', '2026-06-26', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `request_orders`
+--
+
+CREATE TABLE `request_orders` (
+  `req_ord_id` int(11) NOT NULL,
+  `shop` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `req_item` int(11) NOT NULL,
+  `req_quantity` double NOT NULL,
+  `price` double NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `allowed_quantity` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -594,6 +611,12 @@ ALTER TABLE `purchase_orders`
   ADD PRIMARY KEY (`pord_id`);
 
 --
+-- Indexes for table `request_orders`
+--
+ALTER TABLE `request_orders`
+  ADD PRIMARY KEY (`req_ord_id`);
+
+--
 -- Indexes for table `salles`
 --
 ALTER TABLE `salles`
@@ -668,6 +691,12 @@ ALTER TABLE `purchase_items`
 --
 ALTER TABLE `purchase_orders`
   MODIFY `pord_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `request_orders`
+--
+ALTER TABLE `request_orders`
+  MODIFY `req_ord_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `salles`
