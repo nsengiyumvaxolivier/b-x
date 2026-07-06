@@ -77,7 +77,7 @@ if ($checkresult->num_rows > 0) {
               
                 
                 <div class="flex p-2 justify-end">
-                    <button name="save" class="p-2 text-white text-sm rounded shadow shadow-white border font-bold"> Confirm Sale</button>
+                    <button name="save" class="p-2 text-white text-sm rounded shadow shadow-green-500 hover:bg-green-500 bg-green-500/30 border-green-500 border border-2 font-bold"> <i class="bi bi-check-circle"></i> Confirm</button>
                 </div>
 
             </form>

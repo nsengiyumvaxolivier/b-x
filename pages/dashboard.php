@@ -1,3 +1,6 @@
+<?php 
+$business=$_SESSION['user'];
+?>
 <div class="w-full">
 
     <!-- Header -->
@@ -195,23 +198,15 @@
 
         <!-- Recent Activity -->
 
-        <div class="bg-white rounded-xl shadow-md p-5">
+        <div class=" rounded-xl shadow-md p-5">
+            <h1 class="text-yellow-800 font-bold text-xl my-3">Business Share 
+                <button id="download" class="text-sm bg-blue-500 text-white rounded p-2">Download Code</button>
+            </h1>
+            <p id="qr"></p>
 
-            <h3 class="font-bold text-yellow-900 text-lg mb-4">
+            
 
-                Recent Activity
-
-            </h3>
-
-            <div id="activity">
-
-                <p class="text-gray-500">
-
-                    No recent activity.
-
-                </p>
-
-            </div>
+            
 
         </div>
 
@@ -222,6 +217,33 @@
 
 
 <script>
+    var url = "http://localhost/busines/customer/business?business=<?php echo $business ?>";
+new QRCode(document.getElementById("qr"), {
+    text: url,
+    width: 150,
+    height: 150,
+    colorDark:"black",
+    colorLight:"white"
+   
+    
+});
+//download code....................................................
+var button = document.getElementById("download");
+ button.addEventListener("click",function () {  
+        var text=document.getElementById("qr");
+      
+        var opt={
+            margin:0.2,
+            with:100,
+            filename:"<?php echo $_SESSION['business'] ?>",
+            image: {type:'jpeg',quality: 0.8},
+            html2canvas:{scale: 5},
+            jsPDF:{unit: 'in', format: 'A5', orientation: 'portrait'}
+        };
+        html2pdf(text,opt);
+    });
+
+
 
 function loadDashboard(){
 

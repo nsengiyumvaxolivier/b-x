@@ -15,35 +15,78 @@ $page = $_GET['url'] ?? 'dashboard';
     <script src="../plugins/css/tailwindcss.js"></script>
     <link rel="stylesheet" href="../plugins/icons/bootstrap-icons.css">
     <script src="../plugins/js/jquery-3.7.1.min.js"></script>
+    <script src="../plugins/js/qrcode.min.js"></script>
+    <script src="../plugins/js/html2pdf.bundle.min.js"></script>
 </head>
 
 <body>
     <div class="container-fluid bg-yellow-900 relative h-[100vh] p-2 w-full">
-        <div class="h-[8%] bg-yellow-900 w-[100%] overflow-x-auto  bottom-0 left-0 absolute fixed p-2 md:hidden">
+        <div class="h-[8%] bg-yellow-900 w-[100%] overflow-x-auto  bottom-0 left-0 absolute fixed px-1 md:hidden">
             <div
-                class="links flex gap-5 w-[100%] [&_a]:h-[30px] min-w-max  [&_a]:border-2 [&_a]:p-0 [&_a]:rounded [&_a]:rounded-full [&_a]:text-white [&_a]:w-[30px] [&_a]:text-center">
-                <a href="dashboard"
-                    class="<?= $page=='dashboard' ? 'border-green-500 text-green-500' : 'border-white text-white' ?>"><i
-                        class="bi bi-person-workspace"></i></a> 
-                        <a href="sales"
+                class="links flex gap-2 w-[100%] min-w-max [&_a]:border-b-2 [&_a]:w-[30px] [&_a]:h-[30px] [&_a]:p-1">
+                <div class="link flex-column text-center item-center w-[20%] h-[100%]">
+                    <div class="w-full" ><a href="dashboard"
+                    class="<?= $page=='dashboard' ? 'border-green-500 text-green-500' : 'border-white text-white' ?>    "><i
+                        class="bi bi-person-workspace"></i></a></div>
+                    <div for="" class="text-[12px] p-2 text-white">Dashboard</div>
+                </div>
+                <div class="link flex-column text-center item-center w-[20%] h-[100%]">
+                    <div class="w-full" > <a href="sales"
                     class="<?= $page=='sales' ? 'border-green-500 text-green-500' : 'border-white text-white' ?>"><i
-                        class="bi bi-tags"></i></a> 
-                        <a href="purchase"
+                        class="bi bi-tags"></i></a></div>
+                    <div for="" class="text-[12px] p-2 text-white">Sales</div>
+                </div>
+                <div class="link flex-column text-center item-center w-[20%] h-[100%]">
+                    <div class="w-full" >  <a href="purchase"
                     class="<?= $page=='purchase' ? 'border-green-500 text-green-500' : 'border-white text-white' ?>"><i
-                        class="bi bi-cart"></i></a>
-                <a href="customer"
-                    class="<?= $page=='customer' ? 'border-green-500 text-green-500' : 'border-white text-white' ?>"><i
-                        class="bi bi-people"></i></a>
-                <a href="item"
+                        class="bi bi-cart"></i></a></div>
+                    <div for="" class="text-[12px] p-2 text-white">Purchases</div>
+                </div>
+                <div class="link flex-column text-center item-center w-[20%] h-[100%]">
+                    <div class="w-full" > <a href="item"
                     class="<?= $page=='item' ? 'border-green-500 text-green-500' : 'border-white text-white' ?>"><i
-                        class="bi bi-box-seam"></i></a>
-               
-                <a href="supplier"
+                        class="bi bi-box-seam"></i></a></div>
+                    <div for="" class="text-[12px] p-2 text-white">Items</div>
+                </div>
+                <div class="link flex-column text-center item-center w-[20%] h-[100%]">
+                    <div class="w-full" >  <a href="customer"
+                    class="<?= $page=='customer' ? 'border-green-500 text-green-500' : 'border-white text-white' ?>"><i
+                        class="bi bi-people"></i></a></div>
+                    <div for="" class="text-[12px] p-2 text-white">Customer</div>
+                </div>
+                <div class="link flex-column text-center item-center w-[20%] h-[100%]">
+                    <div class="w-full" >  <a href="supplier"
                     class="<?= $page=='supplier' ? 'border-green-500 text-green-500' : 'border-white text-white' ?>"><i
-                        class="bi bi-truck"></i></a>
-                        <a href="report"
+                        class="bi bi-truck"></i></a></div>
+                    <div for="" class="text-[12px] p-2 text-white">Supplier</div>
+                </div>
+                <div class="link flex-column text-center item-center w-[20%] h-[100%]">
+                    <div class="w-full" >  <a href="request_orders"
+                    class="<?= $page=='request_orders' ? 'border-green-500 text-green-500' : 'border-white text-white' ?>"><i
+                        class="bi bi-card-checklist"></i></a></div>
+                    <div for="" class="text-[12px] p-2 text-white">Request</div>
+                </div>
+                <div class="link flex-column text-center item-center w-[20%] h-[100%]">
+                    <div class="w-full" >   <a href="report"
                     class="<?= $page=='report' ? 'border-green-500 text-green-500' : 'border-white text-white' ?>"><i
-                        class="bi bi-list"></i></a>
+                        class="bi bi-list"></i></a></div>
+                    <div for="" class="text-[12px] p-2 text-white">Reports</div>
+                </div>
+                <div class="link flex-column text-center item-center w-[20%] h-[100%]">
+                    <div class="w-full" > <a href="sales"
+                    class="<?= $page=='sales' ? 'border-green-500 text-green-500' : 'border-white text-white' ?>"><i
+                        class="bi bi-tags"></i></a></div>
+                    <div for="" class="text-[12px] p-2 text-white">Logout</div>
+                </div>
+                
+                        
+                       
+               
+                
+               
+               
+                       
+                      
                        
                
 
@@ -59,15 +102,16 @@ $page = $_GET['url'] ?? 'dashboard';
                 </h1>
                 <hr class="text-white">
                 <div class="links flex-column h-[95%]">
-                    <li class="list-none">
-                        <ol> <a href="dashboard">Dashboard</a></ol>
-                        <ol> <a href="sales">Sales</a></ol>
-                        <ol> <a href="purchase">Purchase</a></ol>
-                        <ol><a href="customer">Customer</a></ol>
-                        <ol> <a href="item">Product</a></ol>
-                        <ol> <a href="supplier">Suppliers</a></ol>
-                        <ol> <a href="report">Report</a></ol>
-                    </li>
+                      
+                       <p><a href="dashboard">Dashboard</a></p>
+                        <p><a href="sales">Sales</a></p>
+                        <p><a href="purchase">Purchase</a></p>
+                        <p><a href="customer">Customer</a></p>
+                        <p><a href="item">Product</a></p>
+                        <p><a href="request_orders">Requests</a></p>
+                        <p><a href="supplier">Suppliers</a></p>
+                        <p><a href="report">Report</a></p>
+                    
                     
                 </div>
 

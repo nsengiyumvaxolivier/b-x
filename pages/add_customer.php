@@ -2,6 +2,40 @@
 include("connection.php");
 
 
+$fournd="";
+$customer="";
+
+if (isset($_POST['save'])) {
+    $name=$_POST['name'];
+    $phone=$_POST['phone'];
+    $location=$_POST['location'];
+    $business= $_SESSION['user'];
+
+    //check custoer before to be added..........................................................................
+
+    $checkcustomer=$conn->prepare("SELECT * FROM customer where phone=? and business=?");
+    $checkcustomer->bind_param("si",$phone,$business);
+    $checkcustomer->execute();
+    $customerresult=$checkcustomer->get_result();
+   
+    if ($customerresult->num_rows >0) {
+     $fournd="found";
+     $customer=$customerresult->fetch_assoc()['name'];
+  
+    }
+    else{
+    $insert=$conn->prepare("INSERT INTO customer(name,phone,location,business) values (?,?,?,?)");
+    $insert->bind_param("sssi",$name,$phone,$location,$business);
+    $insert->execute();
+    echo "<script>alert('Customer Added'),location='customer'</script>"; 
+    }
+    
+
+    
+
+}
+
+
 
 
 ?>
@@ -19,6 +53,16 @@ include("connection.php");
 <body>
 
     <div class="container-fluid p-2 w-full h-[100%] flex">
+        <?php if($fournd !=""): ?>
+            <div class=" message bg-orange-500 p-3 rounded text-sm  text-white absolute m-auto md:w-1/2">
+                Phone NUmber was Taken By <b><?php echo htmlspecialchars($customer)?></b>
+            
+            </div>
+
+
+
+            <?php endif?>
+
 
         <div class="conatiner bg-yellow-800 p-2 rounder w-full md:w-1/2 m-auto rounded">
             <form action="" method="post">
@@ -43,7 +87,7 @@ include("connection.php");
                         <label for="" class="block p-1 text-sm text-white font-bold my-2">Location</label>
                         <div class="flex w-full border border-4 border-yellow-900 rounded my-2">
                             <i class="bi bi-geo-alt-fill w-[10%] text-center p-1"></i>
-                             <input type="text" required name="location" id=""
+                             <input type="text" name="location" id=""
                             class="w-[90%] p-2 outline-0 focus:outline-none text-sm font-bold">
                         </div>
                     
@@ -53,7 +97,7 @@ include("connection.php");
               
                 
                 <div class="flex p-2 justify-end">
-                    <button name="save" class="p-2 text-white text-sm rounded shadow shadow-white border font-bold"> Save
+                    <button name="save" class="p-2 text-white text-sm rounded shadow shadow-green-500 border-green-500 hover:bg-green-500 bg-green-500/30 border font-bold"> <i class="bi bi-check-circle"></i> Save
                         Customer</button>
                 </div>
 
@@ -68,26 +112,6 @@ include("connection.php");
 
 </html>
 <?php
-if (isset($_POST['save'])) {
-    $name=$_POST['name'];
-    $phone=$_POST['phone'];
-    $location=$_POST['location'];
-    $business= $_SESSION['user'];
-   
-
-    $insert=$conn->prepare("INSERT INTO customer(name,phone,location,business) values (?,?,?,?)");
-    $insert->bind_param("sssi",$name,$phone,$location,$business);
-    if ($insert->execute()) {
-    echo "<script>alert('Customer Added'),location='customer'</script>"; 
-    
-    
-
-    }
-    
-
-    
-
-}
 
 
 ?>

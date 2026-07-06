@@ -48,10 +48,10 @@ elseif (!isset($_GET['customer']) && !isset($_SESSION['customer'])) {
                 <thead class="bg-yellow-900 text-white text-sm sticky top-0"><tr>
                     <th>#</th>
                     <th class="">Item</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
+                    <th>Qty</th>
+                    <th class="hidden md:block">Price</th>
                     <th>Disc</th>
-                    <th>Total Price</th>
+                    <th> total price</th>
                     <th>Option</th>
 
                 </tr></thead>
@@ -83,15 +83,15 @@ elseif (!isset($_GET['customer']) && !isset($_SESSION['customer'])) {
                         
                         <tr class="border hover:bg-gray-200">
                             <td><?php echo $no ?></td>
-                            <td><?php echo $a['item_name'] ?></td>
-                            <td><?php echo $a['ord_quantity'] ?></td>
-                            <td><?php echo $a['price'] ?></td>
-                            <td><?php echo $a['discount'] ?></td>
-                            <td><?php echo $a['price']*$a['ord_quantity']?></td>
-                            <td class="flex justify-between">
+                            <td><?php echo htmlspecialchars($a['item_name']) ?></td>
+                            <td><?php echo htmlspecialchars($a['ord_quantity']) ?></td>
+                            <td id="price" class="hidden md:block"><?php echo htmlspecialchars($a['price']) ?></td>
+                            <td id="price"><?php echo htmlspecialchars($a['discount']) ?></td>
+                            <td id="price"><?php echo htmlspecialchars($a['price']*$a['ord_quantity'])?></td>
+                            <td class="flex gap-3">
                                 
-                                <a href="order_edit?order=<?php echo $a['ord_id']?>" class="text-white bg-blue-500 px-2 rounded p-1 text-sm"><i class="bi bi-pencil"></i></a>
-                                <button class="text-white bg-red-500 px-2 rounded p-1 text-sm" name="delete" value="<?php echo $a['ord_id'] ?>"><i class="bi bi-trash"></i></button>
+                                <a href="order_edit?order=<?php echo $a['ord_id']?>" class="text-blue-500 hover:text-blue-800 px-2 rounded p-1 text-sm"><i class="bi bi-pencil"></i></a>
+                                <button class="text-red-500 font-bold px-2 rounded p-1 text-sm" name="delete" value="<?php echo $a['ord_id'] ?>"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>
                         
@@ -112,7 +112,7 @@ elseif (!isset($_GET['customer']) && !isset($_SESSION['customer'])) {
                   
                   <tr class=" p-1 [&_td]:bg-white [&_th]:bg-yellow-900 [&_th]:text-sm [&_th]:text-white border border-2 border-yellow-900 h-[40px] p-0 [&_th]:p-0 [&_td]:p-0">
                   
-                  <th>Total</th><td><?php echo $total ?></td><th>Dsc</th><td><?php  echo $total_dsc ?></td><th>Paird</th><td><input type="number" name="p" value="<?php echo $total ?>" id="" class="ouline-0 focus:outline-2 border border-gray-300 border-2 rounded focus:outline-blue-500  p-1"></td><td>h</td>
+                  <th>Dsc</th><td colspan="2"><span id="price"><?php  echo $total_dsc ?></span> RWF</td><th>Total</th><td colspan="2"><span id="price"><?php echo $total ?></span> RWF</td>
                
             </tr>
                   
@@ -122,6 +122,12 @@ elseif (!isset($_GET['customer']) && !isset($_SESSION['customer'])) {
 
       </form>
     </div>
+    <script>
+         document.querySelectorAll("#price").forEach(e=>{
+    var numbers=Number(e.textContent);
+    e.textContent=numbers.toLocaleString();
+ })
+    </script>
 
 </body>
 
