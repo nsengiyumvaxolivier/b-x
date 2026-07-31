@@ -21,24 +21,22 @@ include __DIR__ . '/connection.php';
 </head>
 
 <body class="">
-    <div class="bg-yellow-900 shadow-md p-4 mb-5">
+    <div class="bg-yellow-900 shadow-md p-2 mb-5 flex-column md:flex justify-between">
         <h3 class="font-bold text-white text-lg">Report</h3>
         <hr>
 
         <div class="flex flex-wrap gap-2 p-2">
-            <button onclick="loadReport('today', this)" class="filter-btn text-sm bg-yellow-900 shadow border border-white shadow-white hover:bg-[#6b4f3f] text-white px-4 py-2 rounded-lg text-sm font-semibold">
+            <button onclick="loadReport('today', this)" type="button" class="filter-btn text-sm bg-yellow-900 shadow border border-white shadow-white hover:bg-[#6b4f3f] text-white px-4 py-2 rounded-lg text-sm font-semibold">
                 Today
             </button>
-            <button onclick="loadReport('week', this)" class="filter-btn text-sm bg-yellow-900 shadow border border-white shadow-white hover:bg-[#6b4f3f] text-white px-4 py-2 rounded-lg text-sm font-semibold">
+            <button onclick="loadReport('week', this)" type="button" class="filter-btn text-sm bg-yellow-900 shadow border border-white shadow-white hover:bg-[#6b4f3f] text-white px-4 py-2 rounded-lg text-sm font-semibold">
                 Week
             </button>
-            <button onclick="loadReport('month', this)" class="filter-btn text-sm bg-yellow-900 shadow border border-white shadow-white hover:bg-[#6b4f3f] text-white px-4 py-2 rounded-lg text-sm font-semibold">
+            <button onclick="loadReport('month', this)" type="button" class="filter-btn text-sm bg-yellow-900 shadow border border-white shadow-white hover:bg-[#6b4f3f] text-white px-4 py-2 rounded-lg text-sm font-semibold">
                 Month
             </button>
-            <button onclick="loadReport('year', this)" class="filter-btn text-sm bg-yellow-900 shadow border border-white shadow-white hover:bg-[#6b4f3f] text-white px-4 py-2 rounded-lg text-sm font-semibold">
-                Year
-            </button>
-            <button id="customRangeButton" onclick="toggleCustomDate()" class="filter-btn text-sm bg-yellow-900 shadow border border-white shadow-white hover:bg-[#3f2f1f] text-white px-4 py-2 rounded-lg text-sm font-semibold">
+           
+            <button id="customRangeButton" onclick="toggleCustomDate()" type="button" class="filter-btn text-sm bg-yellow-900 shadow border border-white shadow-white hover:bg-[#3f2f1f] text-white px-4 py-2 rounded-lg text-sm font-semibold">
                 Range
             </button>
         </div>
@@ -47,7 +45,7 @@ include __DIR__ . '/connection.php';
             <input type="date" id="fromDate" class="border border-[#b49d84] rounded-lg px-3 py-2 text-sm">
             <span class="text-[#5f4731]">to</span>
             <input type="date" id="toDate" class="border border-[#b49d84] rounded-lg px-3 py-2 text-sm">
-            <button onclick="loadCustomReport()" class="bg-[#3f2f1f] hover:bg-[#2f2218] text-white px-4 py-2 rounded-lg text-sm font-semibold">
+            <button onclick="loadCustomReport()" type="button" class="bg-[#3f2f1f] hover:bg-[#2f2218] text-white px-4 py-2 rounded-lg text-sm font-semibold">
                 Apply
             </button>
         </div>
@@ -82,7 +80,7 @@ include __DIR__ . '/connection.php';
             <div class="flex justify-between items-center">
                 <div>
                     <p class="text-[#5f4731] text-sm">Total Debit</p>
-                    <h1 id="totalDebit" class="text-3xl font-bold text-[#4f2f1f]">0 RWF</h1>
+                    <h1 id="totalDebit" class="text-sm font-bold text-[#4f2f1f]">0 RWF</h1>
                 </div>
                 <div class="w-14 h-14 rounded-full bg-[#4f2f1f] flex items-center justify-center">
                     <i class="bi bi-currency-dollar text-2xl text-white"></i>
@@ -94,7 +92,7 @@ include __DIR__ . '/connection.php';
             <div class="flex justify-between items-center">
                 <div>
                     <p class="text-[#5f4731] text-sm">Items Sold</p>
-                    <h1 id="itemsSold" class="text-3xl font-bold text-[#70512f]">0</h1>
+                    <h1 id="itemsSold" class="text-sm font-bold text-[#70512f]">0</h1>
                 </div>
                 <div class="w-14 h-14 rounded-full bg-[#70512f] flex items-center justify-center">
                     <i class="bi bi-box-seam text-2xl text-white"></i>
@@ -104,7 +102,7 @@ include __DIR__ . '/connection.php';
     </div>
 
 <div class="flex justify-end mb-5">
-     <button onclick="downloadPdf('salesReportSection', 'sales-report')" class="bg-green-500 shadow border border-white shadow-white hover:bg-[#6b4f3f] text-white px-4 py-2 rounded-lg text-sm font-semibold">
+     <button onclick="downloadPdf('salesReportSection', 'sales-report')" type="button" class="bg-green-500 shadow border border-white shadow-white hover:bg-[#6b4f3f] text-white px-4 py-2 rounded-lg text-sm font-semibold">
                 Download Sales PDF
             </button>
 </div>
@@ -140,7 +138,7 @@ include __DIR__ . '/connection.php';
             </table>
         </div>
     </div>
-    <div class="flex justify-end mb-5"> <button onclick="downloadPdf('purchaseReportSection', 'purchase-report')" class="bg-blue-500 shadow border border-white shadow-white hover:bg-[#6b4f3f] text-white px-4 py-2 rounded-lg text-sm font-semibold">
+    <div class="flex justify-end mb-5"> <button onclick="downloadPdf('purchaseReportSection', 'purchase-report')" type="button" class="bg-blue-500 shadow border border-white shadow-white hover:bg-[#6b4f3f] text-white px-4 py-2 rounded-lg text-sm font-semibold">
                 Download Purchase PDF
             </button></div>
 

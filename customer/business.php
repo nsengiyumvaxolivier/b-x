@@ -74,7 +74,7 @@ No business selected try Again!
                     <div class="flex w-full justify-center p-1"><input type="text" name="phone" id="" class="font-bold text-sm bg-yellow-500/50 rounded outline-none focus:outline focus:outline-blue-500 p-2 w-[70%] placeholder-gray-200" placeholder="07xxxxxxxx" required></div>
                     <?php if ($message == "register"): ?>
                         <div class="new w-full p-2 bg-yellow-600 rounded my-2">
-                           Your Phone Number(<?php echo htmlspecialchars($message) ?>) Is New To <b><?php echo htmlspecialchars($row ['business'])?></b>. Try registration First or Try Other Number. <button type="button" class="bg-green-800 p-2 font-bold text-sm text-white mx-3 my-3 rounded">Register Now</button> 
+                           Your Phone Number(<?php echo htmlspecialchars($message) ?>) Is New To <b><?php echo htmlspecialchars($row ['business'])?></b>. Try registration First or Try Other Number. <a href="register?phone=<?php echo $phone ?>" class="bg-green-800 p-2 font-bold text-sm text-white mx-3 my-3 rounded">Register Now</a> 
                         </div>
                         <?php endif ?>
                         <?php if ($message=="exist"): ?>
@@ -85,7 +85,7 @@ No business selected try Again!
                                 $customerresult=$selesectcustomer->get_result();
                                 $customerrow=$customerresult->fetch_assoc();
                                 ?>
-                                <a href="ordering?customer=<?php echo $customerrow['c_id'] ?>" class="bg-green-600 rounded text-white text-sm p-3 m-auto my-3 block">Contnue As <b><?php echo htmlspecialchars($customerrow['name']) ?></b></a>
+                                <a href="home?customer=<?php echo $customerrow['c_id'] ?>" class="bg-green-600 rounded text-white text-sm p-3 m-auto my-3 block">Contnue As <b><?php echo htmlspecialchars($customerrow['name']) ?></b></a>
                             <?php endif ?>
 
                      <button class="rounded bg-yellow-400 text-white p-2 font-bold my-3 text-sm" name="getin">Get In</button>

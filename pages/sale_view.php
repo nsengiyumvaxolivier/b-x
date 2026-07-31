@@ -16,7 +16,12 @@ $customer=$customer_result->fetch_assoc();
 $customerid=$customer['c_id'];
 $customername=$customer['name'];
 
-
+// select debt............................................................................
+$selectdebt =$conn->prepare("SELECT debit from salles where sale_id=?");
+$selectdebt->bind_param("i",$sale);
+$selectdebt->execute();
+$debtresult=$selectdebt->get_result();
+$debtrow=$debtresult->fetch_assoc();
 
 
 ?>
@@ -28,15 +33,39 @@ $customername=$customer['name'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sale View</title>
     <script src="../plugins/js/html2pdf.bundle.min.js"></script>
+   
 </head>
 <body>
     <div class="container-fluid w-full h-[100%]">
         <form action="" method="post" class="p-0 h-[100%]">
-         <div class="flex justify-between bg-yellow-900 p-2 w-full">
-            <h1 class="text-white font-bold p-1"><i class="bi bi-person-fill"></i><?php echo $customer['name'] ?></h1>
-             <button type="button" class="p-1 bg-green-700 px-2 font-bold rounded shadow shadow-green-500 border-2 border-green-500 text-white" id="download"><i class="bi bi-box-arrow-in-down"></i> A5</button>
+         <div class="flex-column md:flex justify-between bg-yellow-900 p-2 w-full relative">
+            <div class="left flex w-full md:w-1/2 justify-between px-1"><h1 class="text-white font-bold p-1"><i class="bi bi-person-fill"></i><?php echo htmlspecialchars($customer['name']) ?></h1>
+        <p onclick="editdebt()" class="p-1 text-white mx-3 <?= $debtrow['debit'] >0 ?'bg-red-500' :'bg-green-500'?> font-bold cursor-pointer">
+            Debt: <span class="price"><?= htmlspecialchars($debtrow['debit']) ?></span>
+        </p>
+        <div id="debtalert" class="debit rounded  w-[80%] m-auto md:w-1/4 p-2 border shadow text-white absolute bg-yellow-700 leftt-2 top-2 hidden">
+            <h1 class="font-bold">Edit Debt</h1>
+            <hr class="my-2">
+            <label for="" class="my-2 font-bold text-sm">Debt</label>
+            <input type="number" name="" id="current" disabled value="<?= htmlspecialchars($debtrow['debit']) ?>" class="block w-full outline-yellow-500 text-sm font-bold text-black p-1 rounded">
+            <label for="" class="my-2 font-bold text-sm">Paid</label>
+            <input type="number" name="" id="paid" class="block w-full outline-yellow-500 rounded p-1 text-black">
+            <div class="flex justify-between py-3">
+                <button type="button" class="bg-green-500 text-white rounded p-1 font-bold" onclick="pay()">Save</button>
+                <button type="button" class="bg-red-500 text-white rounded p-1 font-bold" onclick="$('#debtalert').addClass('hidden')" >Close</button>
+            </div>
+            
+
+        </div>
+        
+        </div>
+        <hr class="my-2">
+            <div class="right flex justify-between w-full md:w-1/2 px-1">
+                <button type="button" class="p-1 bg-green-700 px-2 font-bold rounded shadow shadow-green-500 border-2 border-green-500 text-white" id="download"><i class="bi bi-box-arrow-in-down"></i> A5</button>
             <button type="button" class="p-1 bg-green-700 px-2 font-bold rounded shadow shadow-green-500 border-2 border-green-500 text-white" id="btn"><i class="bi bi-box-arrow-in-down"></i> A4</button>
-             <button class="p-1 bg-blue-500/20 font-bold rounded shadow shadow-blue-500 border-2 border-blue-500 text-white"><i class="bi bi-pencil"></i> Update</button>
+             <button type="button" onclick="printcard()" class="p-1 bg-blue-500/20 font-bold rounded shadow shadow-blue-500 border-2 border-blue-500 text-white"><i class="bi bi-printer"></i> Print</button>   
+            </div>
+          
          </div>
          <div class="flex h-[90%] my-1 border border-yellow-900 border-2">
          <div class="right h-[100%] w-[100%] p-2">
@@ -45,7 +74,7 @@ $customername=$customer['name'];
             <div class="info flex justify-between bg-white p-1 w-100% h-[15%]">
                 <div class="left w-[40%]">
                     <h1 class="font-bold"><?php echo $business['business'] ?></h1>
-                   <label for="" class="block text-sm"><b>Phone:</b> <?php echo $business['phone'] ?></label>
+                   <label for="" class="block text-sm"><b>Phone:</b> <?php echo htmlspecialchars($business['phone']) ?></label>
                     
                 </div> 
                 <div class="logo w-[20%] h-[80px] ">
@@ -174,14 +203,83 @@ document.querySelectorAll("#pricies").forEach(
         var price=parseFloat(e.innerHTML);
         e.innerHTML=price.toLocaleString();
     }
+
+    
 )
 
+document.querySelectorAll(".price").forEach(
+    e=>{
+        var price=parseFloat(e.innerHTML);
+        e.innerHTML=price.toLocaleString();
+    }
 
+    
+)
 
+//share button............................................
+async function sharePDF() {
 
+    const element = document.getElementById("card");
 
+    const pdfBlob = await html2pdf()
+        .from(element)
+        .outputPdf("blob");
 
-  
-  
+    const file = new File(
+        [pdfBlob],
+        name+".pdf",
+        { type: "application/pdf" }
+    );
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+            title: name,
+            text: "this is reciept",
+            files: [file]
+        });
+    } else {
+        alert("Sharing is not supported on this device.");
+    }
+}
+
+//debt javascript.............................................................................................
+function editdebt(){
+    $("#debtalert").removeClass("hidden");
+}
+
+//save pay button.........................................................................
+function pay(){
+    var sal="<?php echo $sale ?>"
+    var debit=$("#current").val();
+    var paid =$("#paid").val();
+    var left = debit-paid;
+    if (debit>=paid) {
+         $.ajax({
+        url:"./apis/editdebt.php",
+        type:"POST",
+        dataType:"json",
+        data:{leftamount:left,sale:sal},
+        success:function(data){
+            alert(data);
+            window.location='sale_view?sale='+sal;
+        }
+
+    })
+    }
+    else{
+        alert("Paid is Greater than Debt");
+    }
    
+}
+
+//print button................................................................................
+
+function printcard(){
+    var printContents = document.getElementById("card").innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+}
+
 </script>

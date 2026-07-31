@@ -14,10 +14,10 @@ include("connection.php");
 
 <body>
     <div class="container-fluid h-[100%]">
-        <div class="flex w-full p-2 bg-yellow-900 justify-between"><h1 class="text-white font-bold text-sm p-1"><i class="bi bi-tags"></i> Sales List</h1> <a href="add_sale" class="font-bold text-white p-1 border border-green-500 shadow shadow-green-500 rounded text-sm bg-green-500/30"><i class="bi bi-plus-circle"></i> New Sale</a></div>
-        <div class="table-responsive w-full overflow-y-auto my-2">
+        <div class="flex w-full p-2 bg-yellow-900 justify-between h-[8%]"><h1 class="text-white font-bold text-sm p-1"><i class="bi bi-tags"></i> Sales List</h1> <a href="add_sale" class="font-bold text-white p-2 md:p-1 border border-green-500 shadow shadow-green-500 rounded text-sm bg-green-500/30"><i class="bi bi-plus-circle"></i> New Sale</a></div>
+        <div class="table-responsive w-full overflow-y-auto my-2 h-[92%]">
             <table class="w-full border-collapse [&_td]:p-2 text-sm font-bold [&_th]:text-left [&_th]:p-2">
-                <thead class="bg-yellow-900 text-white text-sm"><tr>
+                <thead class="bg-yellow-900 text-white text-sm stiky"><tr>
                     <th>#</th>
                     <th class="">Customer</th>
                     <th>Items</th>
@@ -25,7 +25,7 @@ include("connection.php");
                     <th class="text-right">View</th>
 
                 </tr></thead>
-                <tbody>
+                <tbody class="overflow-y-auto">
                     <?php
                     $no=0;
                     $business= $_SESSION['user'];
@@ -50,7 +50,13 @@ include("connection.php");
                             
                         </td>
                             <td><?php echo $a['products'] ?></td>
-                            <td class="price"><?php echo $a['ammount'] ?></td>
+                          
+                            <td>
+                            <p class="price"><?php echo $a['ammount'] ?></p>
+                            <hr>
+                            <p class="text-[10px] text-red-500 p-0"> ~<span class="price"><?php echo $a['debit'] ?></span> </p>
+                            
+                        </td>
                             <td class=""><a href="sale_view?sale=<?php echo $a['sale_id']?>" class="text-white bg-green-500 rounded p-1 text-sm px-2"><i class="bi bi-eye"></i></a></td>
                         </tr>
                         

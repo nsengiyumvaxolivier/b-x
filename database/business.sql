@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 03, 2026 at 01:07 PM
+-- Generation Time: Jul 04, 2026 at 02:50 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -127,7 +127,10 @@ INSERT INTO `customer` (`name`, `phone`, `c_id`, `business`, `location`, `create
 ('TUYISHIME Gilbert', '0795008053', 2, 4, 'gasabo', '2026-06-11 13:37:39'),
 ('Muhoza', '0795008053', 3, 1, 'Kabuga', '2026-06-12 00:29:27'),
 ('Eva', '07849563', 4, 1, 'Muhanga', '2026-06-12 00:29:46'),
-('Mwizerwa', '0795008053', 5, 1, 'Rambura', '2026-06-12 00:30:09');
+('Mwizerwa', '0795008053', 5, 1, 'Rambura', '2026-06-12 00:30:09'),
+('hirwa', '07950080539', 6, 4, 'kabuga', '2026-07-04 10:30:47'),
+('manzi', '079202213588', 7, 4, 'kicukiro', '2026-07-04 13:16:36'),
+('manzi', '0795008052', 8, 4, 'Cyamuhinda', '2026-07-04 13:46:07');
 
 -- --------------------------------------------------------
 
@@ -156,10 +159,10 @@ CREATE TABLE `item` (
 INSERT INTO `item` (`id`, `item_name`, `in_price`, `out_price`, `quantity`, `item_supliyer`, `reg_date`, `pcs`, `business`, `expiry_date`, `profit`) VALUES
 (1, 'Rice', 29000, 32000, 30, 11, '2026-06-11 10:23:40', 1, 1, '2026-10-30', 3000),
 (2, 'ubunyobwa', 1600, 1800, 50, 2, '2026-06-11 10:25:01', 50, 1, '2026-09-24', 200),
-(3, 'Rice', 29000, 30500, 60, 1, '2026-06-11 10:28:03', 1, 4, '2026-09-25', 1500),
-(4, 'Kawinga', 19000, 23000, 30, 2, '2026-06-11 15:59:04', 1, 4, '2026-09-24', 4000),
+(3, 'Rice', 29000, 30500, 58, 1, '2026-06-11 10:28:03', 1, 4, '2026-09-25', 1500),
+(4, 'Kawinga', 19000, 23000, 29, 2, '2026-06-11 15:59:04', 1, 4, '2026-09-24', 4000),
 (5, 'pakmay', 7000, 8500, 8, 3, '2026-06-12 00:32:22', 2, 1, '2026-10-23', 1500),
-(6, 'salt', 225, 300, 800, 2, '2026-06-22 07:17:02', 40, 4, '2026-06-30', 75);
+(6, 'salt', 225, 300, 797, 2, '2026-06-22 07:17:02', 40, 4, '2026-06-30', 75);
 
 -- --------------------------------------------------------
 
@@ -257,7 +260,13 @@ INSERT INTO `orders` (`ord_id`, `business`, `product`, `ord_quantity`, `ordered_
 (73, 4, 3, 2, '2026-06-18 12:34:31', 1, 500, 1, 30000),
 (74, 4, 4, 2, '2026-06-18 12:35:00', 1, 0, 1, 23000),
 (75, 4, 3, 3, '2026-06-18 12:48:18', 1, 0, 1, 30500),
-(76, 4, 3, 2, '2026-06-23 09:44:39', 1, 0, 2, 30500);
+(76, 4, 3, 2, '2026-06-23 09:44:39', 1, 0, 2, 30500),
+(77, 4, 3, 2, '2026-07-03 13:51:02', 1, 0, 1, 30500),
+(80, 4, 4, 1, '2026-07-03 13:56:10', 1, 0, 1, 23000),
+(83, 4, 6, 3, '2026-07-03 16:32:15', 1, 0, 1, 300),
+(84, 4, 3, 2, '2026-07-04 10:39:38', 0, 0, 6, 30500),
+(85, 4, 4, 8, '2026-07-04 10:48:08', 0, 1500, 6, 21500),
+(86, 4, 6, 6, '2026-07-04 11:06:21', 0, 0, 6, 300);
 
 -- --------------------------------------------------------
 
@@ -356,6 +365,36 @@ INSERT INTO `purchase_orders` (`pord_id`, `business`, `supplier`, `item`, `p_qua
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `request_messages`
+--
+
+CREATE TABLE `request_messages` (
+  `id` int(11) NOT NULL,
+  `shop` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `sender` enum('customer','shop') NOT NULL,
+  `message` text DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `request_messages`
+--
+
+INSERT INTO `request_messages` (`id`, `shop`, `customer`, `sender`, `message`, `created_at`) VALUES
+(1, 4, 1, 'customer', 'karni', '2026-07-03 14:37:54'),
+(2, 4, 1, 'customer', 'heloo wamaye ututuntux', '2026-07-03 16:24:16'),
+(3, 4, 1, 'shop', 'umucere hari umwe', '2026-07-03 16:25:46'),
+(4, 1, 1, 'customer', 'jjj', '2026-07-03 16:53:01'),
+(5, 1, 1, 'customer', 'uu', '2026-07-03 16:54:53'),
+(6, 4, 1, 'customer', 'hi', '2026-07-03 16:56:20'),
+(7, 4, 1, 'shop', 'yeah', '2026-07-03 16:58:12'),
+(8, 4, 1, 'shop', 'audio:uploads/voices/voice_1783091119_cceb377a8251.webm', '2026-07-03 17:05:19'),
+(9, 4, 1, 'shop', 'audio:uploads/voices/voice_1783091141_27f8b14cba33.webm', '2026-07-03 17:05:41');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `request_orders`
 --
 
@@ -369,6 +408,26 @@ CREATE TABLE `request_orders` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `allowed_quantity` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `request_orders`
+--
+
+INSERT INTO `request_orders` (`req_ord_id`, `shop`, `customer`, `req_item`, `req_quantity`, `price`, `created_at`, `allowed_quantity`) VALUES
+(1, 4, 1, 3, 2, 30500, '2026-07-03 13:46:55', 2),
+(2, 4, 1, 4, 5, 23000, '2026-07-03 13:47:40', 1),
+(3, 4, 1, 6, 8, 300, '2026-07-03 13:48:20', 8),
+(4, 4, 1, 4, 2, 23000, '2026-07-03 13:52:50', 1),
+(5, 4, 1, 3, 2, 30500, '2026-07-03 16:24:16', 5),
+(6, 4, 1, 4, 3, 23000, '2026-07-03 16:24:16', 3),
+(7, 4, 1, 6, 3, 300, '2026-07-03 16:30:05', 3),
+(8, 1, 1, 5, 2, 8500, '2026-07-03 16:53:59', 0),
+(9, 4, 1, 6, 15, 300, '2026-07-03 16:57:29', 0),
+(10, 4, 1, 3, 8, 30500, '2026-07-03 16:57:29', 0),
+(11, 4, 2, 4, 4, 23000, '2026-07-04 07:54:22', 0),
+(12, 4, 2, 3, 7, 30500, '2026-07-04 08:05:40', 0),
+(13, 4, 2, 4, 2, 23000, '2026-07-04 08:30:11', 0),
+(14, 4, 6, 3, 2, 30500, '2026-07-04 10:32:55', 2);
 
 -- --------------------------------------------------------
 
@@ -405,7 +464,8 @@ INSERT INTO `salles` (`customer`, `products`, `status`, `sale_id`, `discount`, `
 (2, 4, 0, 8, 2000, '2026-06-12 21:14:44', '', 4, 0, 8, 472000),
 (4, 31, 0, 9, 22400, '2026-06-14 11:19:17', '', 1, 0, 9, 3937600),
 (2, 1, 0, 10, 0, '2026-06-23 09:44:47', '', 4, 0, 10, 61000),
-(1, 3, 0, 11, 1000, '2026-06-23 09:47:13', '', 4, 0, 11, 197500);
+(1, 3, 0, 11, 1000, '2026-06-23 09:47:13', '', 4, 0, 11, 197500),
+(1, 3, 0, 12, 0, '2026-07-04 07:20:24', '', 4, 0, 12, 84900);
 
 -- --------------------------------------------------------
 
@@ -499,7 +559,10 @@ INSERT INTO `salles_item` (`sales_id`, `business`, `product`, `ord_quantity`, `o
 (66, 4, 3, 2, '2026-06-23 09:44:47', 0, 0, 2, 30500, 10),
 (67, 4, 3, 2, '2026-06-23 09:47:13', 0, 500, 1, 30000, 11),
 (68, 4, 4, 2, '2026-06-23 09:47:13', 0, 0, 1, 23000, 11),
-(69, 4, 3, 3, '2026-06-23 09:47:13', 0, 0, 1, 30500, 11);
+(69, 4, 3, 3, '2026-06-23 09:47:13', 0, 0, 1, 30500, 11),
+(70, 4, 3, 2, '2026-07-04 07:20:24', 0, 0, 1, 30500, 12),
+(71, 4, 4, 1, '2026-07-04 07:20:24', 0, 0, 1, 23000, 12),
+(72, 4, 6, 3, '2026-07-04 07:20:24', 0, 0, 1, 300, 12);
 
 -- --------------------------------------------------------
 
@@ -611,6 +674,12 @@ ALTER TABLE `purchase_orders`
   ADD PRIMARY KEY (`pord_id`);
 
 --
+-- Indexes for table `request_messages`
+--
+ALTER TABLE `request_messages`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `request_orders`
 --
 ALTER TABLE `request_orders`
@@ -660,7 +729,7 @@ ALTER TABLE `business`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `c_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `c_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `item`
@@ -672,7 +741,7 @@ ALTER TABLE `item`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `ord_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `ord_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `purchases`
@@ -693,22 +762,28 @@ ALTER TABLE `purchase_orders`
   MODIFY `pord_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `request_messages`
+--
+ALTER TABLE `request_messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT for table `request_orders`
 --
 ALTER TABLE `request_orders`
-  MODIFY `req_ord_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `req_ord_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `salles`
 --
 ALTER TABLE `salles`
-  MODIFY `sale_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `sale_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `salles_item`
 --
 ALTER TABLE `salles_item`
-  MODIFY `sales_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `sales_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `sell`

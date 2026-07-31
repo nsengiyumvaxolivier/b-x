@@ -12,10 +12,10 @@
 
 <body>
     <div class="container-fluid h-[100%]">
-        <div class="flex w-full p-2 bg-yellow-900 justify-between"><h1 class="text-white font-bold text-sm p-1 hidden md:block"><i class="bi bi-people"></i> Supplier List</h1>
+        <div class="flex w-full p-2 bg-yellow-900 justify-between h-[8%]"><h1 class="text-white font-bold text-sm p-1 hidden md:block"><i class="bi bi-people"></i> Supplier List</h1>
             <div class="search bg-white p-1 w-[60%] md:w-1/2 rounded flex"><input type="text" name="search" placeholder="search supplier" class="w-[80%] outline-none text-sm" id="filter"><button type="button" class="w-[20%] bg-gray-200 outline-none flex justify-center" id="find"> <i class="bi bi-search"></i> <span class="hidden md:block p-0 px-1 m-0 w-[fit-content]">Search</span></button></div>
              <a href="add_supplier" class="font-bold text-white p-1 border border-2 border-blue-500 bg-blue-500/30 hover:bg-blue-500 shadow shadow-blue rounded text-sm"> <i class="bi bi-plus-circle"></i> Add Supplier</a></div>
-        <div class="table-responsive w-full overflow-y-auto my-2">
+        <div class="table-responsive w-full overflow-y-auto my-2 h-[92%]">
             <table class="w-full border-collapse [&_td]:p-2 text-sm font-bold [&_th]:text-left [&_th]:p-2">
                 <thead class="bg-yellow-900 text-white text-sm"><tr>
                     <th>#</th>

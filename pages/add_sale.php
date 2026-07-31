@@ -1,5 +1,9 @@
 <?php
 include("connection.php");
+//set timezone...............................................................................................
+date_default_timezone_set("Africa/kigali");
+$timezone=date('Y-m-d h:i:s');
+
 if (isset($_GET['customer'])) {
     $customer = $_GET['customer'];
     $stmt = $conn->prepare("SELECT * FROM customer where c_id =?");
@@ -36,9 +40,9 @@ elseif (!isset($_GET['customer']) && !isset($_SESSION['customer'])) {
         <div class="flex-column md:flex w-full p-2 bg-yellow-900 justify-between">
            <h1 class="text-white font-bold text-sm p-1"><i class="bi bi-person-fill"></i> <?= $_SESSION['customer'] ? $_SESSION['customername'] :'No Customer' ?></h1>
            <div class="flex justify-between md:w-1/2">
-           <a class="rounded p-1 border border-blue-500 text-sm text-white hover:text-blue-500 font-bold shadow shadow-blue-500 bg-blue-500/20" href="get_customer"><i class="bi bi-person"></i> Get Customer</a>
+           <a class="rounded p-1 border border-blue-500 text-sm text-white hover:bg-blue-500 font-bold shadow shadow-blue-500 bg-blue-500/20" href="get_customer"><i class="bi bi-person"></i> Get Customer</a>
         <a class="rounded p-1 border border-2 border-yellow-500 bg-yellow-500/20 text-sm text-white hover:text-yellow-500 font-bold shadow shadow-yellow-500" href="get_item"> <i class="bi bi-box"></i> Get Item</a>
-        <button name="save" href="add_sale" class="font-bold text-white p-1 border border-2 bg-green-500/20 border-green-500 shadow shadow-green-500 rounded text-sm"><i class="bi bi-check text-green-500"></i> Save Sale</button>
+        <button name="save" href="add_sale" class="font-bold text-white p-1 border border-2 bg-green-500/20 border-green-500 hover:bg-green-500 shadow shadow-green-500 rounded text-sm"><i class="bi bi-check-circle text-white"></i> Approve Sale</button>
     </div> 
         
     </div> 
@@ -48,10 +52,13 @@ elseif (!isset($_GET['customer']) && !isset($_SESSION['customer'])) {
                 <thead class="bg-yellow-900 text-white text-sm sticky top-0"><tr>
                     <th>#</th>
                     <th class="">Item</th>
-                    <th>Qty</th>
+                    <th class=""><span class="md:hidden">Qty</span><span class="hidden md:block">Quantity</span></th>
+                   
                     <th class="hidden md:block">Price</th>
-                    <th>Disc</th>
-                    <th> total price</th>
+                    
+                    <th class=""><span class="md:hidden">Dsc</span><span class="hidden md:block">Disacount</span></th>
+                   
+                    <th> Total price</th>
                     <th>Option</th>
 
                 </tr></thead>
@@ -97,6 +104,20 @@ elseif (!isset($_GET['customer']) && !isset($_SESSION['customer'])) {
                         
                         <?php
                     }
+                   ?>
+                    <tr class=" p-1 [&_td]:bg-white [&_th]:bg-yellow-900 [&_th]:text-sm [&_th]:text-white border border-2 border-yellow-800 h-[30px] p-0 [&_th]:p-0 [&_td]:p-0">
+                  
+                  <th>Dsc</th><td colspan="2"><span id="price"><?php  echo $total_dsc ?></span> RWF</td><th>Total</th><td colspan="2"><span id="price"><?php echo $total ?></span> RWF</td>
+               
+            </tr>
+             <tr class=" p-1 [&_td]:bg-white [&_th]:bg-yellow-900 [&_th]:text-sm [&_th]:text-white border border-2 border-yellow-800 h-[30px] p-0 [&_th]:p-0 [&_td]:p-0">
+                  
+                  <th>Debt</th><td colspan="2" id="price"><span id=""></span></td><th>Paid</th><td colspan="2" class=""> <input type="number" class="w-full p-1 outline-none focus:outline focus:outline-yellow-900" name="paired" id="" value="<?php echo $total ?>"></td>
+               
+            </tr>
+                   
+                   <?php
+
                     }
                     else{
                         ?>
@@ -110,11 +131,7 @@ elseif (!isset($_GET['customer']) && !isset($_SESSION['customer'])) {
 
                   ?>
                   
-                  <tr class=" p-1 [&_td]:bg-white [&_th]:bg-yellow-900 [&_th]:text-sm [&_th]:text-white border border-2 border-yellow-900 h-[40px] p-0 [&_th]:p-0 [&_td]:p-0">
-                  
-                  <th>Dsc</th><td colspan="2"><span id="price"><?php  echo $total_dsc ?></span> RWF</td><th>Total</th><td colspan="2"><span id="price"><?php echo $total ?></span> RWF</td>
-               
-            </tr>
+                 
                   
                 </tbody>
             </table>
@@ -134,7 +151,7 @@ elseif (!isset($_GET['customer']) && !isset($_SESSION['customer'])) {
 </html>
 <?php
 if (isset($_POST['save'])) {
-    $debit= $total-$_POST['p'];
+    $debt= $total-$_POST['paired'];
     $status_true=1;
 
   $select_sale= $conn->prepare("SELECT COUNT(sale_id) as current from salles");
@@ -158,8 +175,8 @@ if (isset($_POST['save'])) {
     $dsc = $a['discount'];
     $price=$a['price'];
     //Insert the selected Items intno the salles_item table..................................................................
-    $insert=$conn->prepare("INSERT into salles_item(business,product,ord_quantity,status,discount,customer,sale,price) values(?,?,?,?,?,?,?,?)");
-    $insert->bind_param("iididiid",$business,$item,$quantity,$status,$dsc,$customer,$sale,$price);
+    $insert=$conn->prepare("INSERT into salles_item(business,product,ord_quantity,status,discount,customer,sale,price,ordered_at) values(?,?,?,?,?,?,?,?,?)");
+    $insert->bind_param("iididiids",$business,$item,$quantity,$status,$dsc,$customer,$sale,$price,$timezone);
     $insert->execute();
     //Update Stock Quantity of the selected Items........................................................................
     $update_item=$conn->prepare("UPDATE item set quantity = quantity-? where id=?");
@@ -169,8 +186,10 @@ if (isset($_POST['save'])) {
    
     
   }
-  $sale_insert=$conn->prepare("INSERT INTO salles(customer,products,business,status,discount,debit,sale,ammount) values(?,?,?,?,?,?,?,?)");
-  $sale_insert->bind_param("iiiiddid",$customer,$no,$business,$status,$total_dsc,$debit,$sale,$total);
+  
+ 
+  $sale_insert=$conn->prepare("INSERT INTO salles(customer,products,business,status,discount,debit,sale,ammount,salles_date) values(?,?,?,?,?,?,?,?,?)");
+  $sale_insert->bind_param("iiiiddids",$customer,$no,$business,$status,$total_dsc,$debt,$sale,$total,$timezone);
   
   if ($sale_insert->execute()) {
 
@@ -178,7 +197,7 @@ if (isset($_POST['save'])) {
     unset($_SESSION['customer']);
     unset($_SESSION['customername']);
     
-   echo"<script>alert('List Save'),location='add_sale'</script>";}
+   echo"<script>alert('Sale Approved'),location='add_sale'</script>";}
  
   
   

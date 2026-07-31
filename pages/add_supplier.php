@@ -1,5 +1,7 @@
 <?php
 include("connection.php");
+date_default_timezone_set("Africa/kigali");
+$timezone=date('Y-m-d h:i:s');
 
 
 
@@ -18,9 +20,9 @@ include("connection.php");
 
 <body>
 
-    <div class="container-fluid p-2 w-full h-[100%] flex">
+    <div class="container-fluid p-2 w-full h-[100%] flex bg-yellow-900">
 
-        <div class="conatiner bg-yellow-800 p-2 rounder w-full md:w-1/2 m-auto rounded">
+        <div class="conatiner bg-yellow-800 p-2 rounder w-full md:w-1/2 m-auto rounded shadow shadow-yellow-500">
             <form action="" method="post">
                 <h1 class="text-white font-bold p-2">Add Supplier</h1>
                 <hr class="text-white">
@@ -29,20 +31,20 @@ include("connection.php");
               
                     
                         <label for="" class="block p-1 text-sm text-white font-bold my-2">Supplier Name</label>
-                        <div class="flex w-full border border-4 border-yellow-900 rounded my-2">
-                            <i class="bi bi-person-fill w-[10%] text-center p-1"></i>
+                        <div class="flex w-full border border-2 border-yellow-600 rounded my-2">
+                            <i class="bi bi-person-fill w-[10%] text-center p-1 text-white bg-yellow-600"></i>
                              <input type="text" required name="name" id=""
                             class="w-[90%] p-1 outline-0 focus:outline-none text-sm font-bold">
                         </div>
                        <label for="" class="block p-1 text-sm text-white font-bold my-2">Supplier Phone</label>
-                        <div class="flex w-full border border-4 border-yellow-900 rounded my-2">
-                            <i class="bi bi-telephone-fill w-[10%] text-center p-1"></i>
+                        <div class="flex w-full border border-2 border-yellow-600 rounded my-2">
+                            <i class="bi bi-telephone-fill w-[10%] text-center p-1 text-white bg-yellow-600"></i>
                              <input type="text" required name="phone" id=""
                             class="w-[90%] p-1 outline-0 focus:outline-none text-sm font-bold">
                         </div>
                         <label for="" class="block p-1 text-sm text-white font-bold my-2">Location</label>
-                        <div class="flex w-full border border-4 border-yellow-900 rounded my-2">
-                            <i class="bi bi-geo-alt-fill w-[10%] text-center p-1"></i>
+                        <div class="flex w-full border border-2 border-yellow-600 rounded my-2">
+                            <i class="bi bi-geo-alt-fill w-[10%] text-center p-1 text-white bg-yellow-600"></i>
                              <input type="text" required name="location" id=""
                             class="w-[90%] p-1 outline-0 focus:outline-none text-sm font-bold">
                         </div>
@@ -53,7 +55,7 @@ include("connection.php");
               
                 
                 <div class="flex p-2 justify-end">
-                    <button name="save" class="p-2 text-white text-sm rounded shadow shadow-white border font-bold"> Save
+                    <button name="save" class="p-2 text-white text-sm rounded shadow shadow-green-500 border-green-500 hover:bg-green-500 bg-green-500/30 border font-bold"><i class="bi bi-check-circle"></i> Save
                         Supplier</button>
                 </div>
 
@@ -75,8 +77,8 @@ if (isset($_POST['save'])) {
     $business= $_SESSION['user'];
    
 
-    $insert=$conn->prepare("INSERT INTO supplier(name,phone,location,business) values (?,?,?,?)");
-    $insert->bind_param("sssi",$name,$phone,$location,$business);
+    $insert=$conn->prepare("INSERT INTO supplier(name,phone,location,business,created_at) values (?,?,?,?,?)");
+    $insert->bind_param("sssis",$name,$phone,$location,$business,$timezone);
     if ($insert->execute()) {
     echo "<script>alert('supplier Added'),location='supplier'</script>"; 
     

@@ -36,9 +36,9 @@ elseif (!isset($_GET['supplier']) && !isset($_SESSION['supplier'])) {
         <div class="flex-column md:flex w-full p-2 bg-yellow-900 justify-between">
            <h1 class="text-white font-bold text-sm p-1"><i class="bi bi-person-fill"></i> <?= $_SESSION['supplier'] ? $_SESSION['suppliername'] :'No supplier' ?></h1>
            <div class="flex justify-between md:w-1/2">
-           <a class="rounded p-1 border border-blue-500 text-sm text-white hover:text-blue-500 font-bold shadow shadow-blue-500 bg-blue-500/20" href="get_supplier"><i class="bi bi-person"></i> Get supplier</a>
+           <a class="rounded p-1 border border-blue-500 text-sm text-white hover:bg-blue-500 font-bold shadow shadow-blue-500 bg-blue-500/20" href="get_supplier"><i class="bi bi-person"></i> Get supplier</a>
         <a class="rounded p-1 border border-2 border-yellow-500 bg-yellow-500/20 text-sm text-white hover:text-yellow-500 font-bold shadow shadow-yellow-500" href="get_purchase_item"> <i class="bi bi-box"></i> Get Item</a>
-        <button name="save" href="add_sale" class="font-bold text-white p-1 border border-2 bg-green-500/20 border-green-500 shadow shadow-green-500 rounded text-sm"><i class="bi bi-check text-green-500"></i> Save</button>
+        <button name="save" href="add_sale" class="font-bold text-white p-1 border border-2 bg-green-500/20 border-green-500 shadow shadow-green-500 hover:bg-green-500  rounded text-sm"><i class="bi bi-check-circle text-white"></i> Save</button>
     </div> 
         
     </div> 
@@ -48,9 +48,10 @@ elseif (!isset($_GET['supplier']) && !isset($_SESSION['supplier'])) {
                 <thead class="bg-yellow-900 text-white text-sm sticky top-0"><tr>
                     <th>#</th>
                     <th class="">Item</th>
-                    <th>Quantity</th>
+                    <th class="md:hidden">Qty</th>
+                    <th class="hidden md:block">Quantity</th>
                     <th>In Price</th>
-                    <th>Out Price</th>
+                    <th class="hidden md:block">Out Price</th>
                     <th>Total Price</th>
                     <th>Option</th>
 
@@ -86,17 +87,27 @@ elseif (!isset($_GET['supplier']) && !isset($_SESSION['supplier'])) {
                             <td><?php echo $a['item_name'] ?></td>
                             <td><?php echo $a['p_quantity'] ?></td>
                             <td class="total"><?php echo $a['pin_Price'] ?></td>
-                            <td class="total"><?php echo $a['pout_price'] ?></td>
+                            <td class="total hidden md:block"><?php echo $a['pout_price'] ?></td>
                             <td class="total"><?php echo $a['pin_Price']*$a['p_quantity']?></td>
                             <td class="flex justify-between">
                                 
-                                <a href="edit_purchase_order?porder=<?php echo $a['pord_id']?>" class="text-white bg-blue-500 px-2 rounded p-1 text-sm"><i class="bi bi-pencil"></i></a>
-                                <button class="text-white bg-red-500 px-2 rounded p-1 text-sm" name="delete" value="<?php echo $a['pord_id'] ?>"><i class="bi bi-trash"></i></button>
+                                <a href="edit_purchase_order?porder=<?php echo $a['pord_id']?>" class="text-blue-500  p-1 text-sm"><i class="bi bi-pencil"></i></a>
+                                <button class="text-red-500  p-1 text-sm" name="delete" value="<?php echo $a['pord_id'] ?>"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>
                         
                         <?php
                     }
+
+                    ?>
+
+                    <tr class=" p-1 [&_td]:bg-white [&_th]:bg-yellow-900 [&_th]:text-sm [&_th]:text-white border border-2 border-yellow-900 h-[40px] p-0 [&_th]:p-0 [&_td]:p-0">
+                  
+                  <th>Total</th><td colspan="6" > <span class="total"><?php echo $total ?></span> RWF</td>
+               
+            </tr>
+                   
+                    <?php
                     }
                     else{
                         ?>
@@ -110,12 +121,7 @@ elseif (!isset($_GET['supplier']) && !isset($_SESSION['supplier'])) {
 
                   ?>
                   
-                  <tr class=" p-1 [&_td]:bg-white [&_th]:bg-yellow-900 [&_th]:text-sm [&_th]:text-white border border-2 border-yellow-900 h-[40px] p-0 [&_th]:p-0 [&_td]:p-0">
-                  
-                  <th>Total</th><td colspan="6" class="total"><?php echo $total ?></td>
-               
-            </tr>
-                  
+                 
                 </tbody>
             </table>
         </div>

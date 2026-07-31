@@ -1,6 +1,8 @@
 <?php
 include("connection.php");
 
+date_default_timezone_set("Africa/kigali");
+$timezone=date('Y-m-d h:i:s');
 
 
 
@@ -142,8 +144,8 @@ if (isset($_POST['save'])) {
     $current_stock = $pstock*$picies;
     $profit=$outprice-$inprice;
 
-    $insert=$conn->prepare("INSERT INTO item(item_name,in_price,out_price,quantity,item_supliyer,business,pcs,expiry_date,profit) values (?,?,?,?,?,?,?,?,?)");
-    $insert->bind_param("sdddiiisd",$pname,$inprice,$outprice,$current_stock,$supplier,$business,$picies,$expiry,$profit);
+    $insert=$conn->prepare("INSERT INTO item(item_name,in_price,out_price,quantity,item_supliyer,business,pcs,expiry_date,profit,reg_date) values (?,?,?,?,?,?,?,?,?,?)");
+    $insert->bind_param("sdddiiisds",$pname,$inprice,$outprice,$current_stock,$supplier,$business,$picies,$expiry,$profit,$timezone);
     if ($insert->execute()) {
    echo "<script>alert('Item Added'),location='item'</script>";
     

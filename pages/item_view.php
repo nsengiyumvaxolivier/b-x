@@ -47,7 +47,7 @@ $lastpurchaserow=$lastpurchaseresult->fetch_assoc();
             <div class="right flex w-full p-1 justify-between">
                
                 <a href="edit_item?item=<?php echo $itemid?>" class="p-1 rounded font-bold text-sm bg-blue-300">Update</a>
-                 <button class="p-1 rounded font-bold text-sm bg-red-300">Delete</button>
+                 <button class="p-1 rounded font-bold text-sm bg-red-300" onclick="gotodelete('<?= $itemid ?>')">Delete</button>
 
             </div>
             
@@ -77,7 +77,7 @@ $lastpurchaserow=$lastpurchaseresult->fetch_assoc();
   <h1 class="w-full p-2 font-bold text-sm text-center text-yellow-800">Last Transctions</h1>
             <hr>
             <div class="flex-column md:flex w-full justify-between">
-            <p class="text-sm my-2 w-full tex-left"><label for="" class="font-bold">Last Out: </label> <span><?php echo htmlspecialchars($lastpurchaserow['last_purchase']); ?></span></p>
+            <p class="text-sm my-2 w-full tex-left"><label for="" class="font-bold">Last In: </label> <span><?php echo htmlspecialchars($lastpurchaserow['last_purchase']); ?></span></p>
              <p class="text-sm my-2 w-full tex-left"><label for="" class="font-bold">Last Out: </label> <span><?php echo htmlspecialchars($lastsalerow['last_sale']); ?></span></p>
              
             </div>
@@ -201,4 +201,24 @@ while ($a=$reportresult->fetch_assoc()) {
         var numbers=Number(e.textContent);
         e.textContent=numbers.toLocaleString();
     })
+    //delete button...........................................
+    function gotodelete(itemid){
+        var choise = confirm("Are Your Sure You Want To Delete This Item ?");
+        if (choise==true) {
+            $.ajax({
+                url:"./apis/deleteitem.php",
+                type:"Post",
+                dataType:"json",
+                data:{item:itemid},
+                success:function(response){
+                           alert(response);
+                           window.location="item";
+                }
+            })
+        }
+        else{
+            alert("Item Not Deleted ");
+            return false;
+        }
+    }
 </script>

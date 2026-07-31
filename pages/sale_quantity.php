@@ -1,5 +1,7 @@
 <?php
 include("connection.php");
+date_default_timezone_set("Africa/kigali");
+$timezone=date('Y-m-d h:i:s');
 
 if (!isset($_SESSION['customer'])) {
     echo "<script>alert('Please select Customer',location='add_sale')</script>";
@@ -61,13 +63,13 @@ if ($checkresult->num_rows > 0) {
                        <label for="" class="block p-1 text-sm text-white font-bold my-2">Quantity</label>
                         <div class="flex w-full border border-4 border-yellow-900 rounded my-2">
                            
-                             <input type="number" required name="quantity" id=""
+                             <input type="number" step="any" required name="quantity" id=""
                             class="w-full rounded p-1 outline-0 focus:outline-none text-sm font-bold">
                         </div>
                         <label for="" class="block p-1 text-sm text-white font-bold my-2">Discount</label>
                         <div class="flex w-full border border-4 border-yellow-900 rounded my-2">
                            
-                             <input type="number" value="0" required name="disacount" id=""
+                             <input type="number" step="any" value="0" required name="disacount" id=""
                             class="w-full p-1 outline-0 focus:outline-none text-sm font-bold">
                         </div>
                     
@@ -99,10 +101,10 @@ if (isset($_POST['save'])) {
     $current=$a['quantity'];
 
     if ($current >= $quantity) {
-     $insert=$conn->prepare("INSERT INTO orders(business,customer,product,ord_quantity,discount,status,price) values (?,?,?,?,?,?,?)");
-    $insert->bind_param("iiiddid",$business,$customer,$product,$quantity,$disacount,$status,$price);
+     $insert=$conn->prepare("INSERT INTO orders(business,customer,product,ord_quantity,discount,status,price,ordered_at) values (?,?,?,?,?,?,?,?)");
+    $insert->bind_param("iiiddids",$business,$customer,$product,$quantity,$disacount,$status,$price,$timezone);
     if ($insert->execute()) {
-    echo "<script>alert('Product Selected'),location='add_sale'</script>"; 
+    echo "<script>location='add_sale'</script>"; 
     }
     }
     else {

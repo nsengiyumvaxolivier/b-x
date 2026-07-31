@@ -1,4 +1,11 @@
 <?php
+date_default_timezone_set("Africa/kigali");
+
+$timezone=date('Y-m-d h:i:s');
+
+
+?>
+<?php
 include("connection.php");
 
 
@@ -24,8 +31,8 @@ if (isset($_POST['save'])) {
   
     }
     else{
-    $insert=$conn->prepare("INSERT INTO customer(name,phone,location,business) values (?,?,?,?)");
-    $insert->bind_param("sssi",$name,$phone,$location,$business);
+    $insert=$conn->prepare("INSERT INTO customer(name,phone,location,business,created_at) values (?,?,?,?,?)");
+    $insert->bind_param("sssis",$name,$phone,$location,$business,$timezone);
     $insert->execute();
     echo "<script>alert('Customer Added'),location='customer'</script>"; 
     }
@@ -52,7 +59,7 @@ if (isset($_POST['save'])) {
 
 <body>
 
-    <div class="container-fluid p-2 w-full h-[100%] flex">
+    <div class="container-fluid p-2 w-full h-[100%] flex bg-yellow-900">
         <?php if($fournd !=""): ?>
             <div class=" message bg-orange-500 p-3 rounded text-sm  text-white absolute m-auto md:w-1/2">
                 Phone NUmber was Taken By <b><?php echo htmlspecialchars($customer)?></b>
@@ -64,7 +71,7 @@ if (isset($_POST['save'])) {
             <?php endif?>
 
 
-        <div class="conatiner bg-yellow-800 p-2 rounder w-full md:w-1/2 m-auto rounded">
+        <div class="conatiner bg-yellow-800 p-2 rounder w-full md:w-1/2 m-auto rounded shadow shadow shadow-yellow-500">
             <form action="" method="post">
                 <h1 class="text-white font-bold p-2">Add Customer</h1>
                 <hr class="text-white">
@@ -73,22 +80,22 @@ if (isset($_POST['save'])) {
               
                     
                         <label for="" class="block p-1 text-sm text-white font-bold my-2">Customer Name</label>
-                        <div class="flex w-full border border-4 border-yellow-900 rounded my-2">
-                            <i class="bi bi-person-fill w-[10%] text-center p-1"></i>
+                        <div class="flex w-full border border-2 border-yellow-600 rounded my-2">
+                            <i class="bi bi-person-fill w-[10%] text-center p-1 bg-yellow-600 text-white"></i>
                              <input type="text" required name="name" id=""
-                            class="w-[90%] p-2 outline-0 focus:outline-none text-sm font-bold">
+                            class="w-[90%] p-1 outline-0 focus:outline-none text-sm font-bold">
                         </div>
                        <label for="" class="block p-1 text-sm text-white font-bold my-2">Customer Phone</label>
-                        <div class="flex w-full border border-4 border-yellow-900 rounded my-2">
-                            <i class="bi bi-telephone-fill w-[10%] text-center p-1"></i>
+                        <div class="flex w-full border border-2 border-yellow-600 rounded my-2">
+                            <i class="bi bi-telephone-fill w-[10%] text-center p-1 bg-yellow-600 text-white"></i>
                              <input type="text" required name="phone" id=""
-                            class="w-[90%] p-2 outline-0 focus:outline-none text-sm font-bold">
+                            class="w-[90%] p-1 outline-0 focus:outline-none text-sm font-bold">
                         </div>
                         <label for="" class="block p-1 text-sm text-white font-bold my-2">Location</label>
-                        <div class="flex w-full border border-4 border-yellow-900 rounded my-2">
-                            <i class="bi bi-geo-alt-fill w-[10%] text-center p-1"></i>
+                        <div class="flex w-full border border-2 border-yellow-600 rounded my-2">
+                            <i class="bi bi-geo-alt-fill w-[10%] text-center p-1 bg-yellow-600 text-white"></i>
                              <input type="text" name="location" id=""
-                            class="w-[90%] p-2 outline-0 focus:outline-none text-sm font-bold">
+                            class="w-[90%] p-1 outline-0 focus:outline-none text-sm font-bold">
                         </div>
                     
     

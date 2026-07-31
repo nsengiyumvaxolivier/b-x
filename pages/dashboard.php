@@ -35,7 +35,7 @@ $business=$_SESSION['user'];
                 </div>
             </div>
 
-            <a href="sales" class="text-yellow-900 font-semibold text-sm mt-4 inline-block">
+            <a href="pendingsales" class="text-yellow-900 font-semibold text-sm mt-4 inline-block">
                 View →
             </a>
 
@@ -97,7 +97,7 @@ $business=$_SESSION['user'];
 
             </div>
 
-            <a href="item" class="text-orange-800 font-semibold text-sm mt-4 inline-block">
+            <a href="expireditems" class="text-orange-800 font-semibold text-sm mt-4 inline-block">
                 View →
             </a>
 
@@ -252,6 +252,14 @@ function loadDashboard(){
         success:function(data){
 
             $("#sales").html(data);
+
+        }
+    });
+     $.ajax({
+        url:"./apis/expireditems.php",
+        success:function(data){
+
+            $("#expired").html(data);
 
         }
     });

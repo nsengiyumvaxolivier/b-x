@@ -1,30 +1,57 @@
 <?php
+
 include("../pages/connection.php");
-$shop=$_SESSION['shop'];
-$customer=$_GET['customer'];
-
-
-
-?>
-
-<?php
-
-if (isset($_GET['customer'])) {
-    $customer = $_GET['customer'];
-    $stmt = $conn->prepare("SELECT * FROM customer where c_id =?");
-    $stmt->bind_param("i",$customer);
-    $stmt->execute();
-    $row=$stmt->get_result();
-    $selected_customer=$row->fetch_assoc();
-    $_SESSION['customer']= $selected_customer['c_id'];
-    $_SESSION['customername']=$selected_customer['name'];
-   
-    
-
+$shop = $_SESSION['shop'] ?? 0;
+$customer = $_GET['customer'] ?? 0;
+if (! $shop) {
+    echo "<script>alert('No business selected.');location='business'</script>";
+    exit;
 }
-elseif (!isset($_GET['customer']) && !isset($_SESSION['customer'])) {
-    $_SESSION['customer']="";
-    $_SESSION['customername']="";
+
+if (! $customer) {
+    echo "<script>alert('Please select a customer.');location='business?business=" . $shop . "'</script>";
+    exit;
+}
+
+//select Customer..............................................................................................
+$selectcustomer=$conn->prepare("SELECT * FROM customer where c_id=? and business=?");
+$selectcustomer->bind_param("ii",$customer,$shop);
+$selectcustomer->execute();
+$customerresult=$selectcustomer->get_result();
+$customerrow=$customerresult->fetch_assoc();
+
+$_SESSION['customer']=$customer;
+
+
+//delete..................................................................................................
+
+if (isset($_POST['delete'])) {
+    $requestId = intval($_POST['delete']);
+    $delete = $conn->prepare("DELETE FROM request_orders WHERE req_ord_id = ? AND shop = ? AND customer = ?");
+    $delete->bind_param("iii", $requestId, $shop, $customer);
+    if ($delete->execute()) {
+        echo "<script>alert('Request deleted'),location='ordering'</script>";
+        exit;
+    }
+}
+
+if (isset($_POST['send_message'])) {
+    $m = trim($_POST['cust_message'] ?? '');
+    if ($m !== '') {
+        $conn->query("CREATE TABLE IF NOT EXISTS request_messages (
+            id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            shop INT NOT NULL,
+            customer INT NOT NULL,
+            sender ENUM('customer','shop') NOT NULL,
+            message TEXT,
+            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+        $ins = $conn->prepare("INSERT INTO request_messages (shop, customer, sender, message) VALUES (?, ?, 'customer', ?)");
+        $ins->bind_param("iis", $shop, $customer, $m);
+        $ins->execute();
+    }
+    echo "<script>alert('Message sent'),location='ordering'</script>";
+    exit;
 }
 
 ?>
@@ -43,87 +70,83 @@ elseif (!isset($_GET['customer']) && !isset($_SESSION['customer'])) {
     <div class="container-fluid h-[100%]">
          <form action="" class="p-0 h-[100%]" method="post">
         <div class="flex-column md:flex w-full p-2 bg-yellow-900 justify-between">
-           <h1 class="text-white font-bold text-sm p-1"><i class="bi bi-person-fill"></i> <?= $_SESSION['customer'] ? $_SESSION['customername'] :'No Customer' ?></h1>
-           <div class="flex justify-between md:w-1/2">
+           <h1 class="text-white font-bold text-sm p-1"><i class="bi bi-person-fill"></i> <?= htmlspecialchars($_SESSION['customer'] ? $customerrow['name'] : 'No Customer') ?></h1>
+           <hr class="my-2">
+           <div class="flex md:w-1/2 p-1 justify-between">
+               <a class="rounded p-1 border border-2 border-yellow-500 bg-yellow-500/20 text-sm text-white hover:text-yellow-500 font-bold shadow shadow-yellow-500" href="getitem"> <i class="bi bi-cart-plus"></i> Add Item</a>
+            <a class="rounded p-1 border border-2 border-green-500 bg-green-500/20 text-sm text-white hover:bg-green-500 font-bold shadow shadow-green-500" href="getitem"> <i class="bi bi-cart-check"></i> Submit Cart</a>
            
-        <a class="rounded p-1 border border-2 border-yellow-500 bg-yellow-500/20 text-sm text-white hover:text-yellow-500 font-bold shadow shadow-yellow-500" href="get_item"> <i class="bi bi-box"></i> Get Item</a>
-        <button name="save" href="add_sale" class="font-bold text-white p-1 border border-2 bg-green-500/20 border-green-500 shadow shadow-green-500 rounded text-sm"><i class="bi bi-check text-green-500"></i> Send</button>
-    </div> 
-        
-    </div> 
+              
+                  
+               </div>
+           </div>
+        </div>
 
-        <div class="table-responsive  w-full overflow-y-auto my-2 h-[90%]">
-            <table class="w-full border-collapse [&_td]:p-1 md:[&_td]:p-2 text-sm font-bold [&_th]:text-left [&_th]:p-2">
+        <div class="table-responsive  w-full overflow-y-auto my-2 h-[90%] flex-column md:flex">
+            <table class=" w-full md:w-full border-collapse [&_td]:p-1 md:[&_td]:p-2 text-sm font-bold [&_th]:text-left [&_th]:p-2">
                 <thead class="bg-yellow-900 text-white text-sm sticky top-0"><tr>
                     <th>#</th>
                     <th class="">Item</th>
                     <th>Quantity</th>
-                    <th>Price</th>
+                    <th class="hidden md:block">Price</th>
                     <th>Total Price</th>
                     <th>Option</th>
 
                 </tr></thead>
                 <tbody>
-                    <?php
-                
-                    $no=0;
-                    $business= $_SESSION['shop'];
-                    $status=0; 
-                    $total=0;
-                    $total_dsc=0;
-                    $select = $conn->prepare("SELECT * FROM request_orders,item where request_orders.product = item.id and request_orders.business= ? and item.business = ? and request_orders.status=? and request_orders.customer =? and request_orders.business = item.business ");
-                    $select->bind_param("iiii",$business,$business,$status,$customer);
+                            <?php
+                    $no = 0;
+                    $business = $shop;
+                    $total = 0;
+                    $select = $conn->prepare(
+                        "SELECT ro.req_ord_id, ro.req_item, ro.req_quantity, ro.price, i.item_name, i.quantity AS stock " .
+                        "FROM request_orders ro JOIN item i ON ro.req_item = i.id " .
+                        "WHERE ro.shop = ? AND ro.customer = ? AND ro.allowed_quantity = 0"
+                    );
+                    $select->bind_param("ii", $business, $customer);
                     $select->execute();
 
-                    $result=$select->get_result();
-                    if ($result->num_rows >0) {
-                       
-                    
-                    while ($a= $result->fetch_assoc()) {
-                        $no++;
-                        $total+=$a['price']*$a['ord_quantity'];
-                        $total_dsc+=$a['discount']*$a['ord_quantity'];
-                       
-                        ?>
-                        
+                    $result = $select->get_result();
+                    if ($result->num_rows > 0) {
+                        while ($a = $result->fetch_assoc()) {
+                            $no++;
+                            $total += $a['price'] * $a['req_quantity'];
+                            ?>
                         <tr class="border hover:bg-gray-200">
                             <td><?php echo $no ?></td>
-                            <td><?php echo $a['item_name'] ?></td>
-                            <td><?php echo $a['ord_quantity'] ?></td>
-                            <td><?php echo $a['price'] ?></td>
-                           
-                            <td><?php echo $a['price']*$a['ord_quantity']?></td>
+                            <td><?php echo htmlspecialchars($a['item_name']) ?></td>
+                            <td><?php echo htmlspecialchars($a['req_quantity']) ?></td>
+                            <td class="hidden md:block"><?php echo htmlspecialchars($a['price']) ?></td>
+                            <td><?php echo htmlspecialchars($a['price'] * $a['req_quantity']) ?></td>
                             <td class="flex justify-between">
-                                
-                                <a href="order_edit?order=<?php echo $a['ord_id']?>" class="text-white bg-blue-500 px-2 rounded p-1 text-sm"><i class="bi bi-pencil"></i></a>
-                                <button class="text-white bg-red-500 px-2 rounded p-1 text-sm" name="delete" value="<?php echo $a['ord_id'] ?>"><i class="bi bi-trash"></i></button>
+                                <button class="text-red-500 px-2 rounded p-1 text-sm" name="delete" value="<?php echo $a['req_ord_id'] ?>"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>
-                        
                         <?php
-                    }
-                    }
-                    else{
-                        ?>
-                        
-                        <tr class="py-4 h-[300px]"><td colspan="7" class="text-center py-2 text-2xl text-gray-500"><i class="bi bi-list-ol"></i> No Product Selected</td></tr>
-                        
-                        
-                        <?php
-                    }
-                    
+                        }
 
-                  ?>
-                  
-                  <tr class=" p-1 [&_td]:bg-white [&_th]:bg-yellow-900 [&_th]:text-sm [&_th]:text-white border border-2 border-yellow-900 h-[40px] p-0 [&_th]:p-0 [&_td]:p-0">
+                        ?>
+                         <tr class=" p-1 [&_td]:bg-white [&_th]:bg-yellow-900 [&_th]:text-sm [&_th]:text-white border border-2 border-yellow-900 h-[40px] p-0 [&_th]:p-0 [&_td]:p-0">
                   
                   <th>Total</th><td><?php echo $total ?></td>
                
             </tr>
+                        <?php
+                    } else {
+                        ?>
+                        <tr class="py-4 h-[300px]"><td colspan="6" class="text-center py-2 text-2xl text-gray-500"><i class="bi bi-list-ol"></i> No Request Selected</td></tr>
+                        <?php
+                    }
+                  ?>
+                  
+                 
                   
                 </tbody>
             </table>
+                  
         </div>
+        <!---------------------------------------mesaagr---------------------------------------------------->
+        
 
       </form>
     </div>
@@ -131,64 +154,3 @@ elseif (!isset($_GET['customer']) && !isset($_SESSION['customer'])) {
 </body>
 
 </html>
-<?php
-if (isset($_POST['save'])) {
-    $debit= $total-$_POST['p'];
-    $status_true=1;
-
-  $select_sale= $conn->prepare("SELECT COUNT(sale_id) as current from salles");
-  $select_sale->execute();
-  $sale_result=$select_sale->get_result();
-  $row=$sale_result->fetch_assoc();
-  $sale=$row['current']+1;
-  $business= $_SESSION['shop'];
-  $select = $conn->prepare("SELECT * FROM request_orders,item where request_orders.item = item.id and request_orders.business= ? and item.business = ?  and request_orders.customer =? and request_orders.business = item.business ");
-  $select->bind_param("iii",$business,$business,$customer);
-  $select->execute();
-  $result=$select->get_result();
-  while ($a= $result->fetch_assoc()) {
-    $ord=$a['ord_id'];
-    $update=$conn->prepare("UPDATE orders set status =? where ord_id=? ");
-    $update->bind_param("ii",$status_true,$ord);
-    $update->execute();
-    $item=$a['id'];
-    $totel_price= $a['price']*$a['ord_quantity'];
-    $quantity = $a['ord_quantity'];
-    $dsc = $a['discount'];
-    $price=$a['price'];
-    //Insert the selected Items intno the salles_item table..................................................................
-    $insert=$conn->prepare("INSERT into salles_item(business,product,ord_quantity,status,discount,customer,sale,price) values(?,?,?,?,?,?,?,?)");
-    $insert->bind_param("iididiid",$business,$item,$quantity,$status,$dsc,$customer,$sale,$price);
-    $insert->execute();
-    //Update Stock Quantity of the selected Items........................................................................
-    $update_item=$conn->prepare("UPDATE item set quantity = quantity-? where id=?");
-    $update_item->bind_param("ii",$quantity,$item);
-    $update_item->execute();
-
-   
-    
-  }
-  $sale_insert=$conn->prepare("INSERT INTO salles(customer,products,business,status,discount,debit,sale,ammount) values(?,?,?,?,?,?,?,?)");
-  $sale_insert->bind_param("iiiiddid",$customer,$no,$business,$status,$total_dsc,$debit,$sale,$total);
-  
-  if ($sale_insert->execute()) {
-
-
-    unset($_SESSION['customer']);
-    unset($_SESSION['customername']);
-    
-   echo"<script>alert('List Save'),location='add_sale'</script>";}
- 
-  
-  
- 
-}
-if (isset($_POST['delete'])) {
-    $productd = $_POST['delete'];
-    $delete =$conn->prepare("DELETE FROM orders where ord_id=?");
-    $delete->bind_param("i",$productd);
-    if ($delete->execute()) {
-       echo"<script>alert('Item Deleted'),location='add_sale'</script>";
-    }
-}
-?>
