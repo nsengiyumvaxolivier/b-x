@@ -22,7 +22,7 @@
                     <th class="">Supplier Name</th>
                     <th>Supplier Phone</th>
                     <th class="hidden md:block">Location</th>
-                    <th>View</th>
+                    
 
                 </tr></thead>
                 <tbody id="customer-list">
@@ -39,7 +39,7 @@
                                 var customers=$("#customer-list");
                                 customers.empty();
                            $.each(data,function(index,customer){
-                          var row="<tr class='border hover:bg-gray-200'><td>"+(index+1)+"</td><td>"+customer.name+"</td><td>"+customer.phone+"</td><td class='hidden md:block'>"+customer.location+"</td><td><a href='viewsupplier?id="+customer.sp_id+"' class='text-white  font-bold bg-blue-500 rounded p-1 px-2 text-sm'><i class='bi bi-eye'></i></a></td> </tr>";
+                          var row="<tr class='border hover:bg-gray-200'><td>"+(index+1)+"</td><td>"+customer.name+"</td><td>"+customer.phone+"</td><td class='hidden md:block'>"+customer.location+"</td> </tr>";
                           customers.append(row);
 
                            })

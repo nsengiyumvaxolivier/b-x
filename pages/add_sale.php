@@ -174,9 +174,10 @@ if (isset($_POST['save'])) {
     $quantity = $a['ord_quantity'];
     $dsc = $a['discount'];
     $price=$a['price'];
+    $profit = ($price - $a['in_price']) * $quantity;
     //Insert the selected Items intno the salles_item table..................................................................
-    $insert=$conn->prepare("INSERT into salles_item(business,product,ord_quantity,status,discount,customer,sale,price,ordered_at) values(?,?,?,?,?,?,?,?,?)");
-    $insert->bind_param("iididiids",$business,$item,$quantity,$status,$dsc,$customer,$sale,$price,$timezone);
+    $insert=$conn->prepare("INSERT into salles_item(business,product,ord_quantity,status,discount,customer,sale,price,ordered_at,profit) values(?,?,?,?,?,?,?,?,?,?)");
+    $insert->bind_param("iididiidsd",$business,$item,$quantity,$status,$dsc,$customer,$sale,$price,$timezone,$profit);
     $insert->execute();
     //Update Stock Quantity of the selected Items........................................................................
     $update_item=$conn->prepare("UPDATE item set quantity = quantity-? where id=?");

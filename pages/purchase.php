@@ -22,7 +22,7 @@ include("connection.php");
                     <th class="">Supplier</th>
                     <th>Items</th>
                     <th>Amount</th>
-                    <th class="text-right">View</th>
+                   
 
                 </tr></thead>
                 <tbody>
@@ -53,7 +53,7 @@ include("connection.php");
                         </td>
                             <td><?php echo $a['items'] ?></td>
                             <td class="price"><?php echo $a['ammount'] ?></td>
-                            <td class="text-right "><a href="purchase_view?purchase=<?php echo $a['purchase_id']?>" class="text-white bg-blue-500 rounded p-1 text-sm px-2"><i class="bi bi-eye"></i></a></td>
+                        
                         </tr>
                         
                         <?php
