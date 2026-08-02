@@ -1,5 +1,5 @@
 <?php
-include("../pages/connection.php");
+include(".../pages/connection.php");
 $shop = $_SESSION['shop'] ?? 0;
 $customer = $_GET['customer'] ?? 0;
 

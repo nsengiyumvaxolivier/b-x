@@ -29,39 +29,20 @@
                 <tbody id="item-list">
                     <script>
 
-                     function loaddata(filter){
+                   
 
                         $.ajax({
                             url:'./apis/item.php',
                             type:'post',
                             dataType:'json',
-                            data:{filter:filter},
+                            
                             success:function(data){
-                                var items=$("#item-list");
-                                items.empty();
-                           $.each(data,function(index,item){
-                          var row="<tr class='border hover:bg-gray-200'><td>"+(index+1)+"</td><td>"+item.item_name+"</td><td>"+item.quantity+"</td><td class='hidden md:block'>"+Number(item.in_price).toLocaleString()+"</td><td>"+Number(item.out_price).toLocaleString()+"</td><td><a href='sale_quantity?product="+item.id+"' class='text-white bg-yellow-400  font-bold rounded p-1 px-2 text-sm'><i class='bi bi-check'></i></a></td> </tr>";
-                          items.append(row);
-
-                           })
+                             alert(data);  
+                           }})
 
                                
-                            }
-                        })
-                     }
-                     $(document).ready(function(){
-                        //default filter...................................
-                        loaddata("all");
-                        //click filter......................................
-                        $("#find").click(function(){
-                            loaddata($("#filter").val());
-                        })
-
-                        //live search..............................................................
-                        $("#filter").keyup(function(){
-                            loaddata($("#filter").val());
-                        })
-                     })
+                            
+                   
 
                     </script>
                     

@@ -131,7 +131,7 @@ $page = $_GET['url'] ?? 'dashboard';
                         <p class="<?= $page=='supplier' ? 'border-yellow-500 text-green-500 border border-2' : 'border-white text-white' ?>"><a href="supplier"><i class="bi bi-truck"></i> Suppliers</a></p>
                         <p class="<?= $page=='report' ? 'border-yellow-500 text-green-500 border border-2' : 'border-white text-white' ?>"><a href="report"><i class="bi bi-calendar-fill"></i> Report</a></p>
                         <p class="<?= $page=='notes' ? 'border-yellow-500 text-green-500 border border-2' : 'border-white text-white' ?>"><a href="notes"><i class="bi bi-sticky-fill"></i> Notes</a></p>
-                        <p class="<?= $page=='stock' ? 'border-yellow-500 text-green-500 border border-2' : 'border-white text-white' ?>"><a href="stock"><i class="bi bi-check2-circle"></i> Stock</a></p>
+                        <p class="<?= $page=='stock' ? 'border-yellow-500 text-green-500 border border-2' : 'border-white text-white' ?>"><a href="key"><i class="bi bi-check2-circle"></i> Stock</a></p>
                         <p class="<?= $page=='setting' ? 'border-yellow-500 text-green-500 border border-2' : 'border-white text-white' ?>"><a href="setting"><i class="bi bi-gear-fill"></i> Settings</a></p>
                          <p class=""><button type="button" onclick="logouts()" name="logout" class="text-bold text-sm p-1 text-red-500 font-bold"><i class="bi bi-box-arrow-left"></i> Logout</button></p>
                         
